@@ -31,7 +31,7 @@ class ViewWidget(QWidget):
         point1=myPoint(40,50)
         width=50
         height=30
-        dir=myPoint(1,0)
+        dir=myPoint(3,4)
         rect=myRect(point1,width,height,dir)
         rect_item=RectItem(rect)
         scene.addItem(rect_item)
