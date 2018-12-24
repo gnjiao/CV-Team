@@ -6,11 +6,12 @@ from PyQt5.QtGui import *
 import sys
 from View import View
 from RectItem import RectItem
-
+from Geometry.myPoint import myPoint
+from Geometry.myRect import myRect
 class ViewWidget(QWidget):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
-        #
+
 
         #设置layout
         hbox=QHBoxLayout()
@@ -26,8 +27,14 @@ class ViewWidget(QWidget):
 
         pixmap_item=QGraphicsPixmapItem(QPixmap('./image/cv_team.jpg'))
         scene.addItem(pixmap_item)
-        rect=RectItem()
-        scene.addItem(rect)
+
+        point1=myPoint(40,50)
+        width=50
+        height=30
+        dir=myPoint(1,0)
+        rect=myRect(point1,width,height,dir)
+        rect_item=RectItem(rect)
+        scene.addItem(rect_item)
 
 
         view.setScene(scene)

@@ -49,10 +49,11 @@ class View(QGraphicsView):
     def mouseDoubleClickEvent(self,event):
         pass
     def mouseMoveEvent(self,event):
-        print('cur pos:',event.pos().x(),event.pos().y())
+        #print('cur pos:',event.pos().x(),event.pos().y())
         scene_pos=self.mapToScene(event.pos())
         self.scene_pos=scene_pos
-        print('scene pos:',scene_pos.x(),scene_pos.y())
+        #print('scene pos:',scene_pos.x(),scene_pos.y())
+        QGraphicsView.mouseMoveEvent(self,event)
 
 
     def reset_view(self):
