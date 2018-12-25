@@ -25,6 +25,8 @@ class myPoint:
 
     def normalized(self):
         mod=self.norm()
+        if mod == 0:
+            return
         return myPoint(float(self.x/mod),float(self.y/mod))
 
 

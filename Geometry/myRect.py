@@ -18,7 +18,7 @@ class myRect:
         diagonal_vec=self.C-point
         diagonal=diagonal_vec.norm()
         cosTheta=self.direction.x*diagonal_vec.normalized().x+self.direction.y*diagonal_vec.normalized().y
-        sinTheta=math.sqrt(1-cosTheta*cosTheta)
+        sinTheta=math.sqrt(abs(1-cosTheta*cosTheta))
         return myRect((point+self.C)*0.5,abs(diagonal*cosTheta),abs(diagonal*sinTheta),self.direction)
     def resize_by_B(self,point):
         diagonal_vec=self.D-point

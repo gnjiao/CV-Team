@@ -25,22 +25,22 @@ class View(QGraphicsView):
         self.scene_pos=QPoint()
         self.key_press=False
 
-    def keyPressEvent(self, event):
-        if event.key()==Qt.Key_0:
-            print('a')
-            self.key_press=True
-            return
-        # else:
-        #     self.key_press=False
-        QGraphicsView.keyPressEvent(event)
-    def keyReleaseEvent(self, event):
-        if event.key()==Qt.Key_0:
-            print('a')
-            self.key_press=False
-            return
-        # else:
-        #     self.key_press=False
-        QGraphicsView.keyReleaseEvent(event)
+    # def keyPressEvent(self, event):
+    #     if event.key()==Qt.Key_0:
+    #         print('a')
+    #         self.key_press=True
+    #         return
+    #     # else:
+    #     #     self.key_press=False
+    #     QGraphicsView.keyPressEvent(event)
+    # def keyReleaseEvent(self, event):
+    #     if event.key()==Qt.Key_0:
+    #         print('a')
+    #         self.key_press=False
+    #         return
+    #     # else:
+    #     #     self.key_press=False
+    #     QGraphicsView.keyReleaseEvent(event)
 
     def wheelEvent(self,event):
         cursor_pos=event.pos()
@@ -50,20 +50,16 @@ class View(QGraphicsView):
         horz_scale=cursor_pos.x()/view_width
         vert_scale=cursor_pos.y()/view_height
         wheel_delta=event.angleDelta()
-        if self.key_press is True:
-            QGraphicsView.wheelEvent(event)
+        if wheel_delta.y()>0:
+            self.on_zoom_in(6)
         else:
-            if wheel_delta.y()>0:
-                self.on_zoom_in(6)
-            else:
-                self.on_zoom_out(6)
-            view_point=self.transform().map(scene_pos)
-
-            vert_bar=self.verticalScrollBar()
-            a=int(view_point.x()-view_width*horz_scale)
-            self.horizontalScrollBar().setSliderPosition(a)
-            b=int(view_point.y()-view_height*vert_scale)
-            vert_bar.setSliderPosition(b)
+            self.on_zoom_out(6)
+        view_point = self.transform().map(scene_pos)
+        a=int(view_point.x()-view_width*horz_scale)
+        self.horizontalScrollBar().setSliderPosition(a)
+        b=int(view_point.y()-view_height*vert_scale)
+        self.verticalScrollBar().setSliderPosition(b)
+        #QGraphicsView.wheelEvent(self,event)
 
     def mouseDoubleClickEvent(self,event):
         pass
@@ -91,7 +87,6 @@ class View(QGraphicsView):
     def on_zoom_out(self,value):
         self.zoom_slider.setValue(self.zoom_slider.value() - value)
     def on_set_matrix(self):
-        print('value changed')
         scale=math.pow(2,(self.zoom_slider.value()-250)*0.02)
         transform=QTransform()
         transform.scale(scale,scale)
@@ -103,8 +98,14 @@ class View(QGraphicsView):
 
 
 if __name__=='__main__':
-    pass
-
+    app = QApplication(sys.argv)
+    view = View()
+    scene = QGraphicsScene()
+    pix_map_item = QGraphicsPixmapItem(QPixmap('./image/cv_team.jpg'))
+    scene.addItem(pix_map_item)
+    view.setScene(scene)
+    view.show()
+    app.exec()
 
 
 

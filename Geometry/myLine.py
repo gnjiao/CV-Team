@@ -6,7 +6,7 @@ class myLine:
         self.end_point=end
         self.mid_point=(self.start_point+self.end_point)/2
         self.direction=(self.end_point-self.start_point).normalized()
-
+        self.length=(self.end_point-self.start_point).norm()
     def angle_to(self,other):
         x=self.direction.x*other.direction.y-other.direction.x*self.direction.y
         y=self.direction.x*other.direction.x+self.direction.y*other.direction.y

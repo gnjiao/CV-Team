@@ -6,6 +6,7 @@ from PyQt5.QtGui import *
 import sys
 from View import View
 from RectItem import RectItem
+from Geometry.FindLineItem import FindLineItem
 from Geometry.myPoint import myPoint
 from Geometry.myRect import myRect
 class ViewWidget(QWidget):
@@ -61,7 +62,7 @@ if __name__=='__main__':
     height = 30
     dir = myPoint(3, 4)
     rect = myRect(point1, width, height, dir)
-    rect_item = RectItem(rect)
+    rect_item = FindLineItem()#RectItem(rect)
     view_widget=ViewWidget()
     img=QImage("./image/cv_team.jpg")
     view_widget.set_image(img)

@@ -58,6 +58,7 @@ class RectItem(QGraphicsItem):
         QGraphicsItem.mousePressEvent(self, event)
 
     def mouseMoveEvent(self, event):
+
         if self.in_area==1:
             self.rect=self.rect.resize_by_A(myPoint(event.pos().x(),event.pos().y()))
             self.prepareGeometryChange()
@@ -79,7 +80,7 @@ class RectItem(QGraphicsItem):
             self.prepareGeometryChange()
             self.update()
 
-        print('mouse move')
+        #print('mouse move')
         QGraphicsItem.mouseMoveEvent(self,event)
     def hoverMoveEvent(self, event):
         #print(self.is_in_area(event.pos(), self.rect.A, 10),'is that in a')
