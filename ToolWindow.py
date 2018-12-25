@@ -12,6 +12,7 @@ class ToolWindow(QMainWindow):
 
         #设置窗口工具栏
         tool_bar=QToolBar()
+        tool_bar.setIconSize(QSize(24, 24))
         self.addToolBar(tool_bar)
         action_connection=QAction(QIcon(QPixmap("./image/cv_team.jpg")),self.tr(u'connection'),self)
         tool_bar.addAction(action_connection)

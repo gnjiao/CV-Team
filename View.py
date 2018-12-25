@@ -23,8 +23,24 @@ class View(QGraphicsView):
         self.setViewportUpdateMode(QGraphicsView.SmartViewportUpdate)
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
         self.scene_pos=QPoint()
+        self.key_press=False
 
-
+    def keyPressEvent(self, event):
+        if event.key()==Qt.Key_0:
+            print('a')
+            self.key_press=True
+            return
+        # else:
+        #     self.key_press=False
+        QGraphicsView.keyPressEvent(event)
+    def keyReleaseEvent(self, event):
+        if event.key()==Qt.Key_0:
+            print('a')
+            self.key_press=False
+            return
+        # else:
+        #     self.key_press=False
+        QGraphicsView.keyReleaseEvent(event)
 
     def wheelEvent(self,event):
         cursor_pos=event.pos()
@@ -34,17 +50,20 @@ class View(QGraphicsView):
         horz_scale=cursor_pos.x()/view_width
         vert_scale=cursor_pos.y()/view_height
         wheel_delta=event.angleDelta()
-        if wheel_delta.y()>0:
-            self.on_zoom_in(6)
+        if self.key_press is True:
+            QGraphicsView.wheelEvent(event)
         else:
-            self.on_zoom_out(6)
-        view_point=self.transform().map(scene_pos)
+            if wheel_delta.y()>0:
+                self.on_zoom_in(6)
+            else:
+                self.on_zoom_out(6)
+            view_point=self.transform().map(scene_pos)
 
-        vert_bar=self.verticalScrollBar()
-        a=int(view_point.x()-view_width*horz_scale)
-        self.horizontalScrollBar().setSliderPosition(a)
-        b=int(view_point.y()-view_height*vert_scale)
-        vert_bar.setSliderPosition(b)
+            vert_bar=self.verticalScrollBar()
+            a=int(view_point.x()-view_width*horz_scale)
+            self.horizontalScrollBar().setSliderPosition(a)
+            b=int(view_point.y()-view_height*vert_scale)
+            vert_bar.setSliderPosition(b)
 
     def mouseDoubleClickEvent(self,event):
         pass
@@ -56,10 +75,7 @@ class View(QGraphicsView):
         QGraphicsView.mouseMoveEvent(self,event)
 
 
-    def reset_view(self):
-        pass
-    def set_image(self):
-        pass
+
     def adapt_window(self):
         pass
     def set_scene(self):

@@ -14,7 +14,7 @@ class RectItem(QGraphicsItem):
         self.setFlag(QGraphicsItem.ItemIsSelectable)
         self.setFlag(QGraphicsItem.ItemIsMovable,True)
         self.setAcceptHoverEvents(True)
-
+        #self.setFlag(QGraphicsItem.ItemIgnoresTransformations)
 
     def paint(self, painter, option, widget=None):
         pen = QPen()

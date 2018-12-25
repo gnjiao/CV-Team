@@ -30,7 +30,7 @@ class MainWindow(QMainWindow):
         about = about_menu.addAction(self.tr(u'About'))
 
         # 设置状态栏
-        spacer = QWidget()
+        spacer = QWidget(self,Qt.Widget)
         spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         status_bar = QStatusBar(self)
         status_bar.addWidget(spacer)
@@ -46,25 +46,31 @@ class MainWindow(QMainWindow):
 
         # 设置工具栏
         tool_bar = QToolBar()
-        tool_bar.setIconSize(QSize(16, 16))
+        tool_bar.setIconSize(QSize(32, 32))
 
         # tool_button=QToolButton(tool_bar)
         # tool_button.setText('this button')
-        tool_bar.addAction('this action')
+        action_load_img = QAction(QIcon(QPixmap("./image/cv_team.jpg")), self.tr(u'load img'), self)
+        action_load_video = QAction(QIcon(QPixmap("./image/cv_team.jpg")), self.tr(u'load img'), self)
+        tool_bar.addAction(action_load_img)
+        tool_bar.addSeparator()
+        tool_bar.addAction(action_load_video)
+        tool_bar.addSeparator()
+
+
+
         self.addToolBar(tool_bar)
 
         # 设置树形窗口
         dock_tool = QDockWidget(self.tr(u'tool library'))
-
         tool_window = ToolWindow()
         dock_tool.setWidget(tool_window)  # 添加一个主窗口作为工具窗口
-
         dock_tool.setAllowedAreas(Qt.LeftDockWidgetArea)
         dock_tool.setMinimumWidth(300)
         # self.addDockWidget(Qt.LeftDockWidgetArea,dock_tool)
 
         # 编辑窗口
-        edit_widget = QWidget()
+        edit_widget = QWidget(self,Qt.Widget)
         # edit_widget.acceptDrops()
         # line_edit=QLineEdit(edit_widget)
         # line_edit.setGeometry(500,100,100,200)
@@ -72,7 +78,7 @@ class MainWindow(QMainWindow):
 
         # 命令输出窗口
 
-        command_widget = QWidget(self)
+        command_widget = QWidget(self,Qt.Widget)
         command_label = QLabel(command_widget)
         command_label.setText('this is command label')
         # command_widget.setGeometry(400,400,200,200)
@@ -80,27 +86,28 @@ class MainWindow(QMainWindow):
         # 原始图像显示窗口
         dock_src_img = QDockWidget('dock src')
         dock_src_img.setMinimumWidth(800)
-        img_widget = QWidget()
+        img_widget = QWidget(self,Qt.Widget)
         dock_src_img.setWidget(img_widget)
 
         # 图像输出窗口
         self.dock_dst_img = QDockWidget('dock dst')
         self.dock_dst_img.setMinimumWidth(800)
 
-        img_widget = QWidget()
+        img_widget = QWidget(self,Qt.Widget)
         self.dock_dst_img.setWidget(img_widget)
 
         # 结果显示窗口
         # dock_result=QDockWidget(self)
-        result_widget = QWidget()
+        result_widget = QWidget(self,Qt.Widget)
         label=QLabel('this is result widget',result_widget)
 
         # 自定义信号
 
-        # 槽函数
+        # 连接信号与槽
+
 
         # 窗口的布局管理
-        center_widget = QWidget()
+        center_widget = QWidget(self,Qt.Widget)
         splitter = QSplitter(Qt.Vertical)
         splitter.addWidget(edit_widget)
         splitter.addWidget(result_widget)
@@ -151,6 +158,10 @@ class MainWindow(QMainWindow):
         # widget=QWidget()
         # widget.setLayout(layout)
         # self.setCentralWidget(widget)
+
+     #下面是槽函数实例
+    def on_load_img_pressed(self):
+        pass
 
 
 app = QApplication(sys.argv)
