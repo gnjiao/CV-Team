@@ -7,12 +7,12 @@ from Geometry.myLine import myLine
 import math
 
 class FindLineItem(QGraphicsItem):
-    def __init__(self, start=myPoint(50,50),end=myPoint(146,50), parent=None):
+    def __init__(self, line, parent=None):
         super(FindLineItem, self).__init__(parent)
         self.in_area=0
-        self.start=start
-        self.end=end
-        self.line=myLine(self.start,self.end)
+        self.start=line.start_point
+        self.end=line.end_point
+        self.line=line
 
         self.rect_count=8
         self.rects=list()
@@ -29,10 +29,9 @@ class FindLineItem(QGraphicsItem):
         pen = QPen()
         pen.setColor(Qt.red)
         painter.setPen(pen)
+        painter.drawLine(self.line.start_point.x,self.line.start_point.y,self.line.end_point.x,self.line.end_point.y)
         for i in range(self.rect_count):
             self.draw_rect(painter,self.rects[i])
-        painter.drawLine(self.start.x,self.start.y,self.end.x,self.end.y)
-
 
     def boundingRect(self):
         x_list = [self.rects[0].A.x,  self.rects[0].D.x, self.rects[-1].A.x, self.rects[-1].D.x]
@@ -42,21 +41,21 @@ class FindLineItem(QGraphicsItem):
         return QRectF(x_list[0]-5,y_list[0]-5,x_list[3]-x_list[0]+10,y_list[3]-y_list[0]+10)
 
     def mousePressEvent(self, event):
-        if self.is_in_area(event.pos(), self.start, 5):
+        if self.is_in_area(event.pos(), self.line.start_point, 5):
             self.in_area=1
             self.setFlag(QGraphicsItem.ItemIsMovable, False)
-        elif self.is_in_area(event.pos(), self.end, 5):
+        elif self.is_in_area(event.pos(), self.line.end_point, 5):
             self.in_area=2
             self.setFlag(QGraphicsItem.ItemIsMovable, False)
-        elif self.is_in_area(event.pos(), self.rect.C, 5):
+        elif self.rect_height/2-5<self.line.to_point(myPoint(event.pos().x(),event.pos().y()))<self.rect_height/2+5:
             self.in_area=3
             self.setFlag(QGraphicsItem.ItemIsMovable, False)
-        elif self.is_in_area(event.pos(), self.rect.D, 5):
-            self.in_area=4
-            self.setFlag(QGraphicsItem.ItemIsMovable, False)
-        elif self.is_in_area(event.pos(), (self.rect.B+self.rect.C)/2, 10):
-            self.in_area=5
-            self.setFlag(QGraphicsItem.ItemIsMovable, False)
+        # elif self.is_in_area(event.pos(), self.rect.D, 5):
+        #     self.in_area=4
+        #     self.setFlag(QGraphicsItem.ItemIsMovable, False)
+        # elif self.is_in_area(event.pos(), (self.rect.B+self.rect.C)/2, 10):
+        #     self.in_area=5
+        #     self.setFlag(QGraphicsItem.ItemIsMovable, False)
         else:
             self.in_area=0
             self.setFlag(QGraphicsItem.ItemIsMovable, True)
@@ -65,18 +64,22 @@ class FindLineItem(QGraphicsItem):
 
     def mouseMoveEvent(self, event):
 
-        # if self.in_area==1:
-        #     self.rect=self.rect.resize_by_A(myPoint(event.pos().x(),event.pos().y()))
-        #     self.prepareGeometryChange()
-        #     self.update()
-        # if self.in_area==2:
-        #     self.rect=self.rect.resize_by_B(myPoint(event.pos().x(),event.pos().y()))
-        #     self.prepareGeometryChange()
-        #     self.update()
-        # if self.in_area==3:
-        #     self.rect=self.rect.resize_by_C(myPoint(event.pos().x(),event.pos().y()))
-        #     self.prepareGeometryChange()
-        #     self.update()
+        if self.in_area==1:
+            self.line=self.line.resize_by_start(myPoint(event.pos().x(),event.pos().y()))
+            print('line:',self.line.start_point.x,self.line.start_point.y)
+            self.generate_rect()
+            self.prepareGeometryChange()
+            self.update()
+        if self.in_area==2:
+            self.line=self.line.resize_by_end(myPoint(event.pos().x(),event.pos().y()))
+            self.generate_rect()
+            self.prepareGeometryChange()
+            self.update()
+        if self.in_area==3:
+            self.rect_height=self.line.to_point(myPoint(event.pos().x(),event.pos().y()))*2
+            self.generate_rect()
+            self.prepareGeometryChange()
+            self.update()
         # if self.in_area==4:
         #     self.rect=self.rect.resize_by_D(myPoint(event.pos().x(),event.pos().y()))
         #     self.prepareGeometryChange()
@@ -90,7 +93,8 @@ class FindLineItem(QGraphicsItem):
         QGraphicsItem.mouseMoveEvent(self,event)
 
     def hoverMoveEvent(self, event):
-        if self.is_in_area(event.pos(), self.start, 5) or self.is_in_area(event.pos(), self.end, 5):
+        if self.is_in_area(event.pos(), self.line.start_point, 5) or self.is_in_area(event.pos(), self.line.end_point, 5) \
+                or self.rect_height/2-5<self.line.to_point(myPoint(event.pos().x(),event.pos().y()))<self.rect_height/2+5:
             self.setCursor(Qt.SizeAllCursor)
         else:
             self.setCursor(Qt.ArrowCursor)
@@ -98,9 +102,10 @@ class FindLineItem(QGraphicsItem):
 
     def generate_rect(self):
         gap=self.line.length/(self.rect_count-1)
+        self.rects.clear()
         for i in range(self.rect_count):
-            self.rects.append(myRect(myPoint(self.start.x+gap*i,self.start.y),self.rect_width,self.rect_height))
-        print(self.rects.count(myRect))
+            self.rects.append(myRect(self.line.start_point+self.line.direction*gap*i,self.rect_width,self.rect_height,self.line.direction))
+        print('dir:',self.line.direction.x,self.line.direction.y)
 
 
     @staticmethod
