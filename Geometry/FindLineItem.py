@@ -9,7 +9,6 @@ import math
 class FindLineItem(QGraphicsItem):
     def __init__(self, start=myPoint(50,50),end=myPoint(146,50), parent=None):
         super(FindLineItem, self).__init__(parent)
-        #self.rect=list[myRect(),]
         self.in_area=0
         self.start=start
         self.end=end
@@ -91,17 +90,14 @@ class FindLineItem(QGraphicsItem):
         QGraphicsItem.mouseMoveEvent(self,event)
 
     def hoverMoveEvent(self, event):
-        pass
-        #print(self.is_in_area(event.pos(), self.rect.A, 10),'is that in a')
-        # if self.is_in_area(event.pos(), self.rect.A, 5) or self.is_in_area(event.pos(), self.rect.B, 5) \
-        #         or self.is_in_area(event.pos(), self.rect.C, 5) or self.is_in_area(event.pos(), self.rect.D, 5):
-        #     self.setCursor(Qt.SizeAllCursor)
-        # else:
-        #     self.setCursor(Qt.ArrowCursor)
-        # QGraphicsItem.hoverMoveEvent(self,event)
+        if self.is_in_area(event.pos(), self.start, 5) or self.is_in_area(event.pos(), self.end, 5):
+            self.setCursor(Qt.SizeAllCursor)
+        else:
+            self.setCursor(Qt.ArrowCursor)
+
 
     def generate_rect(self):
-        gap=self.line.length/self.rect_count
+        gap=self.line.length/(self.rect_count-1)
         for i in range(self.rect_count):
             self.rects.append(myRect(myPoint(self.start.x+gap*i,self.start.y),self.rect_width,self.rect_height))
         print(self.rects.count(myRect))

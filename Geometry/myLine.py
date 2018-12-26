@@ -52,6 +52,19 @@ class myLine:
         d2=self.direction.x*other.direction.y-self.direction.y*other.direction.x
         t=d1/d2
         return self.start_point+(self.direction*t)
+    def closest_point(self,point,must_be_on_segment=False):
+        v=(point-self.start_point).normalized()
+        v_point=point.normalized()
+        dot_product=v.x*v_point.x+v.y*v_point.y
+        if must_be_on_segment:
+            if dot_product<0:
+                dot_product=0
+            if dot_product>self.length:
+                l=dot_product
+        along_vector=self.direction*dot_product
+        return self.start_point+along_vector
+    def to_point(self,point):
+        pass
 
 
 
@@ -65,11 +78,11 @@ class myLine:
 if __name__=='__main__':
     point1=myPoint(-2,5)
     point2=myPoint(2,5)
-    point3=myPoint(2,-4)
+    point3=myPoint(1,0)
     point4 = myPoint(2, 8)
     line1=myLine(point1,point2)
     line2=myLine(point3,point4)
-    p=line1.intersect_with(line2)
+    p=line1.closest_point(point3)
     print('p:',p.x,p.y)
     print(line1.is_perpendicular_to(line2))
 
