@@ -66,7 +66,7 @@ class FindLineItem(QGraphicsItem):
 
         if self.in_area==1:
             self.line=self.line.resize_by_start(myPoint(event.pos().x(),event.pos().y()))
-            print('line:',self.line.start_point.x,self.line.start_point.y)
+            #print('line:',self.line.start_point.x,self.line.start_point.y)
             self.generate_rect()
             self.prepareGeometryChange()
             self.update()
@@ -105,7 +105,7 @@ class FindLineItem(QGraphicsItem):
         self.rects.clear()
         for i in range(self.rect_count):
             self.rects.append(myRect(self.line.start_point+self.line.direction*gap*i,self.rect_width,self.rect_height,self.line.direction))
-        print('dir:',self.line.direction.x,self.line.direction.y)
+        #print('dir:',self.line.direction.x,self.line.direction.y)
 
 
     @staticmethod
