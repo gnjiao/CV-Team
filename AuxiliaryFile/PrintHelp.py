@@ -11,7 +11,7 @@
 鼠标位置转成点：myPoint(event.pos().x(),event.pos().y())
 图片路径：      './image/cv_team.jpg'
 模块测试：     if __name__=='__main__':
-
+弧度转角度：  (180/math.pi)*a
 
 
 """
