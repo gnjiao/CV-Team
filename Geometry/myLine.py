@@ -74,13 +74,6 @@ class myLine:
         return myLine(self.start_point,other)
 
 
-
-
-
-
-
-
-
 if __name__=='__main__':
     point1=myPoint(-2,5)
     point2=myPoint(2,5)

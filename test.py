@@ -4,10 +4,12 @@ import cv2
 import os
 
 src_img = cv2.imread('./image/gray_cat.jpg')
-image1 = np.array(src_img)
-cv2.namedWindow('img')
-cv2.imshow('img', src_img)
-cv2.waitKey()
+print(src_img[6][7])
+temp_diff = np.zeros([6, 8])
+img_arr=np.array(src_img)
+a=float(src_img[4][4])-float(src_img[5][5])
+print(a)
+
 
 
 """
@@ -47,6 +49,6 @@ cv2.waitKey(0)
 
 
 
-# a=np.zeros(50,40)
-# print(a)
+a=np.zeros([50,40])
+print(a)
 
