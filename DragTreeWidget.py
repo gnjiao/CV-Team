@@ -24,12 +24,14 @@ class DragTreeWidget(QTreeWidget):
     #             drag.exec(Qt.MoveAction)
     #     QTreeWidget.mouseMoveEvent(self,event)
     #
-    # def mousePressEvent(self,event):
-    #     #print(event.button())
-    #     self.drag_position=event.pos()
-    #     selectedItem=self.itemAt(self.drag_position)
-    #     self.doSelect()
-    #     QTreeWidget.mousePressEvent(self,event)
+    def mousePressEvent(self,event):
+        if event.button() == Qt.LeftButton:
+            drag = QDrag(self)
+            mimedata = QMimeData()
+            mimedata.setText('aaa')  # 放入数据
+            drag.setMimeData(mimedata)
+            drag.exec_()  # exec()函数并不会阻塞主函数
+        QTreeWidget.mousePressEvent(self, event)
 
     def add_tree_widget_item(self):
         root_pretreatment=QTreeWidgetItem(self)
