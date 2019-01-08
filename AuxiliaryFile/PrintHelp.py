@@ -12,6 +12,7 @@
 图片路径：      './image/cv_team.jpg'
 模块测试：     if __name__=='__main__':
 弧度转角度：  (180/math.pi)*a
-
+连接信号与槽(action)： self.delete_action.triggered.connect(self.delete_item)   #action
+QStringList   ['a','b']
 
 """
