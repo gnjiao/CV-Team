@@ -50,12 +50,6 @@ class FindLineItem(QGraphicsItem):
         elif self.rect_height/2-5<self.line.to_point(myPoint(event.pos().x(),event.pos().y()))<self.rect_height/2+5:
             self.in_area=3
             self.setFlag(QGraphicsItem.ItemIsMovable, False)
-        # elif self.is_in_area(event.pos(), self.rect.D, 5):
-        #     self.in_area=4
-        #     self.setFlag(QGraphicsItem.ItemIsMovable, False)
-        # elif self.is_in_area(event.pos(), (self.rect.B+self.rect.C)/2, 10):
-        #     self.in_area=5
-        #     self.setFlag(QGraphicsItem.ItemIsMovable, False)
         else:
             self.in_area=0
             self.setFlag(QGraphicsItem.ItemIsMovable, True)
@@ -66,7 +60,6 @@ class FindLineItem(QGraphicsItem):
 
         if self.in_area==1:
             self.line=self.line.resize_by_start(myPoint(event.pos().x(),event.pos().y()))
-            #print('line:',self.line.start_point.x,self.line.start_point.y)
             self.generate_rect()
             self.prepareGeometryChange()
             self.update()
@@ -80,16 +73,7 @@ class FindLineItem(QGraphicsItem):
             self.generate_rect()
             self.prepareGeometryChange()
             self.update()
-        # if self.in_area==4:
-        #     self.rect=self.rect.resize_by_D(myPoint(event.pos().x(),event.pos().y()))
-        #     self.prepareGeometryChange()
-        #     self.update()
-        # if self.in_area==5:
-        #     self.rect = self.rect.rotate_to(myPoint(event.pos().x(), event.pos().y()))
-        #     self.prepareGeometryChange()
-        #     self.update()
 
-        #print('mouse move')
         QGraphicsItem.mouseMoveEvent(self,event)
 
     def hoverMoveEvent(self, event):
@@ -105,7 +89,6 @@ class FindLineItem(QGraphicsItem):
         self.rects.clear()
         for i in range(self.rect_count):
             self.rects.append(myRect(self.line.start_point+self.line.direction*gap*i,self.rect_width,self.rect_height,self.line.direction))
-        #print('dir:',self.line.direction.x,self.line.direction.y)
 
 
     @staticmethod

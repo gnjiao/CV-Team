@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 点:              print('point:',self.point.x,self.point.y)
 线：             print('line:',self.line.start_point.x,self.line.start_point.y)
