@@ -49,6 +49,7 @@ class FittingCircle:
             temp_num=self.delete_count-len(self.select_point_ng)
             self.delete_points(self.select_point_ok,self.select_point_ng,temp_num)
     def delete_points(self,points_ok,points_ng,delete_count):
+        pass
 
 
     def Huber(self):
