@@ -71,6 +71,6 @@ if __name__=='__main__':
     view_widget.set_image(img)
     view_widget.add_item(rect_item)
     view_widget.show()
-    #window.resize(800,600)
+    view_widget.resize(800,600)
     #window.showMaximized()
     app.exec()

@@ -1,9 +1,10 @@
 import math
 import numpy as np
+import cv2
 from  numpy import random as nr
 from  Geometry.myPoint import  myPoint
 
-class FittingCircle:
+class FittingLine:
     def __init__(self,points_input):
         self.points_OK=None
         self.points_NG=None
@@ -23,7 +24,6 @@ class FittingCircle:
             chosed_point0=nr.randint(0,len(self.points_input))
             chosed_point1=nr.randint(0,len(self.points_input))
             if chosed_point0==chosed_point1:
-                i=i-1
                 continue
             a=self.points_input[chosed_point1].y-self.points_input[chosed_point0].y
             b=self.points_input[chosed_point0].x-self.points_input[chosed_point1].x
@@ -37,17 +37,19 @@ class FittingCircle:
                     self.temp_point_ok.append(self.points_input[j])
                 else:
                     self.temp_point_ng.append(self.points_input[j])
-            if len(self.temp_point_ok) > len(self.select_point_ok):
-                self.k=math.log10(0.0001)/math.log10(1-pow(len(self.temp_point_ok)/len(self.points_input),2))
-                self.select_point_ok.clear()
-                self.select_point_ng.clear()
-                self.select_point_ok=self.temp_point_ok
-                self.select_point_ng=self.temp_point_ng
-            if i< self.k:
-                break
+            # if len(self.temp_point_ok) > len(self.select_point_ok):
+            #     self.k=math.log(0.0001)/math.log(1-pow(len(self.temp_point_ok)/len(self.points_input),2))
+            #     self.select_point_ok.clear()
+            #     self.select_point_ng.clear()
+            #     self.select_point_ok=self.temp_point_ok
+            #     self.select_point_ng=self.temp_point_ng
+            # if i < self.k:
+            #     break
+            self.select_point_ok = self.temp_point_ok
         if len(self.select_point_ng)<self.delete_count:
             temp_num=self.delete_count-len(self.select_point_ng)
             self.delete_points(self.select_point_ok,self.select_point_ng,temp_num)
+
     def delete_points(self,points_ok,points_ng,delete_count):
         pass
 
@@ -59,8 +61,8 @@ class FittingCircle:
 if __name__=='__main__':
     point1=myPoint(0,0)
     point2=myPoint(0,5)
-    point3=myPoint(0,7)
-    point4=myPoint(0,8)
+    point3=myPoint(2,7)
+    point4=myPoint(2,8)
     point5=myPoint(0,4)
     point6=myPoint(0,9)
     points=list()
@@ -72,5 +74,8 @@ if __name__=='__main__':
     points.append(point6)
     print(points[2].y)
     print(len(points))
+    fit=FittingLine(points)
+    fit.Ransac()
+    print(len(fit.select_point_ok))
 
 

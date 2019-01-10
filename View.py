@@ -18,10 +18,13 @@ class View(QGraphicsView):
         self.zoom_slider.valueChanged.connect(self.on_set_matrix)
         self.zoom_slider.setVisible(False)
         self.setRenderHint(QPainter.Antialiasing,False)
-        self.setDragMode(QGraphicsView.RubberBandDrag)
+        #self.setDragMode(QGraphicsView.RubberBandDrag)
+        self.setDragMode(QGraphicsView.ScrollHandDrag)
         self.setOptimizationFlag(QGraphicsView.DontSavePainterState)
         self.setViewportUpdateMode(QGraphicsView.SmartViewportUpdate)
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
+        # self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        # self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scene_pos=QPoint()
         self.key_press=False
 
@@ -43,23 +46,34 @@ class View(QGraphicsView):
     #     QGraphicsView.keyReleaseEvent(event)
 
     def wheelEvent(self,event):
-        cursor_pos=event.pos()
-        scene_pos=self.mapToScene(cursor_pos)
-        view_width=self.viewport().width()
-        view_height=self.viewport().height()
-        horz_scale=cursor_pos.x()/view_width
-        vert_scale=cursor_pos.y()/view_height
-        wheel_delta=event.angleDelta()
-        if wheel_delta.y()>0:
-            self.on_zoom_in(6)
+        if self.key_press:
+            QGraphicsView.wheelEvent(self, event)
         else:
-            self.on_zoom_out(6)
-        view_point = self.transform().map(scene_pos)
-        a=int(view_point.x()-view_width*horz_scale)
-        self.horizontalScrollBar().setSliderPosition(a)
-        b=int(view_point.y()-view_height*vert_scale)
-        self.verticalScrollBar().setSliderPosition(b)
-        #QGraphicsView.wheelEvent(self,event)
+            cursor_pos=event.pos()
+            scene_pos=self.mapToScene(cursor_pos)
+            view_width=self.viewport().width()
+            view_height=self.viewport().height()
+            horz_scale=cursor_pos.x()/view_width
+            vert_scale=cursor_pos.y()/view_height
+            wheel_delta=event.angleDelta()
+            if wheel_delta.y()>0:
+                self.on_zoom_in(6)
+            else:
+                self.on_zoom_out(6)
+            view_point = self.transform().map(scene_pos)
+            a=int(view_point.x()-view_width*horz_scale)
+            self.horizontalScrollBar().setSliderPosition(a)
+            b=int(view_point.y()-view_height*vert_scale)
+            self.verticalScrollBar().setSliderPosition(b)
+
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Control:
+            self.key_press=True
+    def keyReleaseEvent(self, event):
+        if event.key() == Qt.Key_Control:
+            self.key_press=False
+
 
     def mouseDoubleClickEvent(self,event):
         pass

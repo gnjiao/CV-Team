@@ -22,6 +22,7 @@ class FindLineItem(QGraphicsItem):
 
         self.setFlag(QGraphicsItem.ItemIsSelectable)
         self.setFlag(QGraphicsItem.ItemIsMovable,True)
+        #self.setFlag(QGraphicsItem.ItemIgnoresTransformations)
         self.setAcceptHoverEvents(True)
         #self.setFlag(QGraphicsItem.ItemIgnoresTransformations)
 
@@ -58,6 +59,7 @@ class FindLineItem(QGraphicsItem):
 
     def mouseMoveEvent(self, event):
 
+
         if self.in_area==1:
             self.line=self.line.resize_by_start(myPoint(event.pos().x(),event.pos().y()))
             self.generate_rect()
@@ -83,6 +85,12 @@ class FindLineItem(QGraphicsItem):
         else:
             self.setCursor(Qt.ArrowCursor)
 
+    # def wheelEvent(self,event):
+    #     if event.delta() > 0:
+    #         self.setScale(self.scale() * 1.1)
+    #     else:
+    #         self.setScale(self.scale()*0.9)
+    #     QGraphicsItem.wheelEvent(self,event)
 
     def generate_rect(self):
         gap=self.line.length/(self.rect_count-1)
