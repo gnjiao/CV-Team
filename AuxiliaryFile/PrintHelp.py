@@ -18,3 +18,7 @@
 QStringList   ['a','b']
 
 """
+import numpy
+numpy.array([1,2])
+
+
