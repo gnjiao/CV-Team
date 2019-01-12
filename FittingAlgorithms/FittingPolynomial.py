@@ -16,7 +16,6 @@ class FittingPolynomial:
         matA=[]
         for i in range(0, self.order + 1):
             matA1=[]
-            #self.matA1.clear()
             for j in range(0, self.order + 1):
                 tx = 0.0
                 for k in range(0, len(self.xa)):

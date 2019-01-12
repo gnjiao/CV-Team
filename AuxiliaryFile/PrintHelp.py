@@ -18,7 +18,6 @@
 QStringList   ['a','b']
 
 """
-import numpy
-numpy.array([1,2])
-
-
+import  math
+a=math.log(0.0001)/math.log(1-pow(3/10,2))
+print(a)
