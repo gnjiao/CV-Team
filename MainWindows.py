@@ -46,7 +46,7 @@ class MainWindow(QMainWindow):
 
         # 设置工具栏
         tool_bar = QToolBar()
-        tool_bar.setIconSize(QSize(32, 32))
+        tool_bar.setIconSize(QSize(24, 24))
 
         # tool_button=QToolButton(tool_bar)
         # tool_button.setText('this button')
@@ -56,6 +56,24 @@ class MainWindow(QMainWindow):
         tool_bar.addSeparator()
         tool_bar.addAction(action_load_video)
         tool_bar.addSeparator()
+
+
+        widget=QWidget(self,Qt.Widget)
+        pushbutton=QPushButton(widget)
+        pushbutton.setText('push')
+        tool_bar.addWidget(pushbutton)
+        line_edit=QLineEdit(widget)
+        tool_bar.addWidget(line_edit)
+        line_edit.setMaximumWidth(120)
+        label=QLabel()
+        tool_bar.addWidget(label)
+        label.setMinimumWidth(750)
+        label1=QLabel()
+        label1.setText('this is the second label')
+        tool_bar.addWidget(label1)
+
+        # label.setText('this is label')
+        # tool_bar.addWidget(widget)
 
 
 
