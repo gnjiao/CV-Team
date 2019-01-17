@@ -23,14 +23,14 @@ class ViewWidget(QWidget):
         vbox=QVBoxLayout()
         #适应屏幕按钮
         tool_button_fit=QToolButton(self)
-        tool_button_fit.setIcon(QIcon(QPixmap('./image/cv_team.jpg')))
+        tool_button_fit.setIcon(QIcon(QPixmap('../image/cv_team.jpg')))
         hbox.addWidget(tool_button_fit)
         #放大缩小按钮
         tool_button_zoom_in=QToolButton(self)
-        tool_button_zoom_in.setIcon(QIcon(QPixmap('./image/cv_team.jpg')))
+        tool_button_zoom_in.setIcon(QIcon(QPixmap('../image/cv_team.jpg')))
         hbox.addWidget(tool_button_zoom_in)
         tool_button_zoom_out=QToolButton(self)
-        tool_button_zoom_out.setIcon(QIcon(QPixmap('./image/cv_team.jpg')))
+        tool_button_zoom_out.setIcon(QIcon(QPixmap('../image/cv_team.jpg')))
         hbox.addWidget(tool_button_zoom_out)
 
         #设置layout
@@ -43,9 +43,15 @@ class ViewWidget(QWidget):
         hbox.addWidget(label)
         vbox.addLayout(hbox)
         self.setLayout(vbox)
-
+        # self.setStyleSheet(
+        #     "QWidget{color:black}"
+        #     "QWidget:hover{color:red}"
+        #     "QWidget{background-color:lightgray}"
+        #     "QWidget{border:0px}"
+        #     "QWidget{border-radius:5px}"
+        # )
     def set_image(self,image):
-        pix_map_item = QGraphicsPixmapItem(QPixmap(img))
+        pix_map_item = QGraphicsPixmapItem(QPixmap(image))
         self.scene.addItem(pix_map_item)
         #pix_map_item.setZValue(0)
         self.view.setScene(self.scene)

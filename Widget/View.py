@@ -27,7 +27,13 @@ class View(QGraphicsView):
         # self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scene_pos=QPoint()
         self.key_press=False
-
+        self.setStyleSheet(
+            "QGraphicsView{color:black}"
+            "QGraphicsView:hover{color:red}"
+            "QGraphicsView{background-color:lightgray}"
+            "QGraphicsView{border:0px}"
+            "QGraphicsView{border-radius:5px}"
+        )
     # def keyPressEvent(self, event):
     #     if event.key()==Qt.Key_0:
     #         print('a')

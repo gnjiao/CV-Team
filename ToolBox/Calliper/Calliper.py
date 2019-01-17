@@ -12,7 +12,7 @@ class Calliper:
         self.gray=None
         self.polar_property=0
         self.result_type=0
-        self.threshold=0
+        self.threshold=2
         self.result=list()
         self.A = rect_corners[0]
         self.B = rect_corners[1]
@@ -32,7 +32,7 @@ class Calliper:
         self.AD_count = int(LA.norm(self.AD))
         self.diff = np.zeros([self.AB_count-1, self.AD_count])
         self.temp_diff = np.zeros([self.AB_count-1, self.AD_count])
-        self.set_img('./image/cv_team.jpg')
+        self.set_img('../../image/cv_team.jpg')
         if self.src_img.shape[2]!=1:
             self.img_to_gray()
         else:

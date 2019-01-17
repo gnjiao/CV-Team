@@ -45,7 +45,7 @@ class MainWindow(QMainWindow):
         self.setStatusBar(status_bar)
 
         # 设置工具栏
-        tool_bar = QToolBar()
+        tool_bar = QToolBar('toolBar')
         tool_bar.setIconSize(QSize(24, 24))
 
         # tool_button=QToolButton(tool_bar)
@@ -71,6 +71,12 @@ class MainWindow(QMainWindow):
         label1=QLabel()
         label1.setText('this is the second label')
         tool_bar.addWidget(label1)
+        tool_bar.setStyleSheet("QToolBar{color:black}" 
+                               "QToolBar:hover{color:red}"
+                               "QToolBar{background-color:lightgray}"
+                               "QToolBar{border:2px}"
+                               "QToolBar{border-radius:5px}"
+                               "QToolBar{padding:2px 4px}")
 
         # label.setText('this is label')
         # tool_bar.addWidget(widget)

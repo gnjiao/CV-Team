@@ -2,7 +2,7 @@ from  PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import sys
-from DragTreeWidget import DragTreeWidget
+from Widget.DragTreeWidget import DragTreeWidget
 class DropTreeWidget(QTreeWidget):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
@@ -25,11 +25,11 @@ class DropTreeWidget(QTreeWidget):
         self.pop_menu = QMenu(self)
         self.delete_action = QAction(self)
         self.delete_action.setText('delete')
-        self.delete_action.setIcon(QIcon('icon\Start_50px.png'))
+        self.delete_action.setIcon(QIcon('..\icon\Start_50px.png'))
 
         self.rename_action = QAction(self)
         self.rename_action.setText('rename')
-        self.rename_action.setIcon(QIcon('icon\Start_50px.png'))
+        self.rename_action.setIcon(QIcon('..\icon\Start_50px.png'))
 
         self.pop_menu.addAction(self.delete_action)
         self.pop_menu.addAction(self.rename_action)
@@ -69,7 +69,7 @@ class DropTreeWidget(QTreeWidget):
     def dropEvent(self, event):
         item=QTreeWidgetItem(self)
         item.setText(0,event.mimeData().text())
-        item.setIcon(0, QIcon('icon\Start_50px.png'))
+        item.setIcon(0, QIcon('..\icon\Start_50px.png'))
         #item.setFlags(Qt.ItemIsUserCheckable | item.flags())
 
     def contextMenuEvent(self,event):

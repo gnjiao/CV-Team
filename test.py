@@ -14,6 +14,16 @@ class MainWindow(QMainWindow):
         line_edit = QLineEdit(widget)
         label = QLabel(widget)
         label.setText('this is label')
+        self.pushButton=QPushButton(self)
+        self.pushButton.setGeometry(50,50,50,50)
+        self.pushButton.setIcon(QIcon(".\image\cv_team.jpg"))
+        self.pushButton.setStyleSheet("QPushButton{color:black}"
+                                      #"QPushButton:hover{color:red}"
+                                      "QPushButton{background-color:lightgreen}"
+                                      #"QPushButton{border:2px}"
+                                      #"QPushButton{border-radius:10px}"
+                                      #"QPushButton{padding:2px 4px}"
+        )
 
 app = QApplication(sys.argv)
 
