@@ -7,6 +7,8 @@ import sys
 import math
 
 class View(QGraphicsView):
+    signal_mouse_move=pyqtSignal(int,int)
+
     def __init__(self,*args):
         super().__init__(*args)
         #设置一个滑动条
@@ -52,6 +54,8 @@ class View(QGraphicsView):
     #     QGraphicsView.keyReleaseEvent(event)
 
     def wheelEvent(self,event):
+        scene_pos = self.mapToScene(event.pos())
+        self.signal_mouse_move.emit(scene_pos.x(), scene_pos.y())
         if self.key_press:
             QGraphicsView.wheelEvent(self, event)
         else:
@@ -84,16 +88,14 @@ class View(QGraphicsView):
     def mouseDoubleClickEvent(self,event):
         pass
     def mouseMoveEvent(self,event):
-        #print('cur pos:',event.pos().x(),event.pos().y())
         scene_pos=self.mapToScene(event.pos())
         self.scene_pos=scene_pos
-        #print('scene pos:',scene_pos.x(),scene_pos.y())
+        self.signal_mouse_move.emit(scene_pos.x(), scene_pos.y())
         QGraphicsView.mouseMoveEvent(self,event)
 
 
 
-    def adapt_window(self):
-        pass
+
     def set_scene(self):
         pass
     def get_mat(self):
@@ -101,6 +103,9 @@ class View(QGraphicsView):
     def cvmat_qimage(self):
         pass
     def qimage_cvmat(self):
+        pass
+
+    def adapt_window(self):
         pass
     def on_zoom_in(self,value):
         self.zoom_slider.setValue(self.zoom_slider.value() + value)
@@ -111,10 +116,11 @@ class View(QGraphicsView):
         transform=QTransform()
         transform.scale(scale,scale)
         self.setTransform(transform)
-    def on_adapt_window(self):
-        pass
-    def on_drag_mouse(self):
-        pass
+
+    # def on_adapt_window(self):
+    #     #     pass
+    #     # def on_drag_mouse(self):
+    #     #     pass
 
 
 if __name__=='__main__':

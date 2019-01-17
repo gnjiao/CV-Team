@@ -18,29 +18,33 @@ class ViewWidget(QWidget):
         self.scene=QGraphicsScene()
         self.view=View(self)
         self.pix_map=None
-
         hbox=QHBoxLayout()
         vbox=QVBoxLayout()
         #适应屏幕按钮
         tool_button_fit=QToolButton(self)
         tool_button_fit.setIcon(QIcon(QPixmap('../image/cv_team.jpg')))
+        tool_button_fit.clicked.connect(self.fit)
+
         hbox.addWidget(tool_button_fit)
+
         #放大缩小按钮
         tool_button_zoom_in=QToolButton(self)
         tool_button_zoom_in.setIcon(QIcon(QPixmap('../image/cv_team.jpg')))
         hbox.addWidget(tool_button_zoom_in)
+        tool_button_zoom_in.clicked.connect(self.zoom_in)
+
         tool_button_zoom_out=QToolButton(self)
         tool_button_zoom_out.setIcon(QIcon(QPixmap('../image/cv_team.jpg')))
         hbox.addWidget(tool_button_zoom_out)
+        tool_button_zoom_out.clicked.connect(self.zoom_out)
 
         #设置layout
-        a=self.view.scene_pos.x()
-        b='%d' %a
-        label=QLabel('location label')
-        label.setText(b)
+        self.label=QLabel('location label')
+        self.label.setAlignment(Qt.AlignRight)
+        self.label.setText('x=0      y=0   ')
 
         vbox.addWidget(self.view)
-        hbox.addWidget(label)
+        hbox.addWidget(self.label)
         vbox.addLayout(hbox)
         self.setLayout(vbox)
         # self.setStyleSheet(
@@ -50,9 +54,15 @@ class ViewWidget(QWidget):
         #     "QWidget{border:0px}"
         #     "QWidget{border-radius:5px}"
         # )
+
+
+        #
+        self.view.signal_mouse_move[int,int].connect(self.on_mouse_move)
+
+        self.pix_map_item=None
     def set_image(self,image):
-        pix_map_item = QGraphicsPixmapItem(QPixmap(image))
-        self.scene.addItem(pix_map_item)
+        self.pix_map_item = QGraphicsPixmapItem(QPixmap(image))
+        self.scene.addItem(self.pix_map_item)
         #pix_map_item.setZValue(0)
         self.view.setScene(self.scene)
         #self.pix_map = QPixmap("./image/cv_team.jpg")
@@ -60,6 +70,23 @@ class ViewWidget(QWidget):
     def add_item(self,item):
         self.scene.addItem(item)
         #item.setZvalue(100)
+    def fit(self):
+        self.view.on_zoom_in(6)
+        self.repaint()
+    def zoom_in(self):
+        self.view.on_zoom_in(6)
+        self.repaint()
+    def zoom_out(self):
+        self.view.on_zoom_out(6)
+        self.repaint()
+    def on_mouse_move(self,val1,val2):
+        a=val1
+        a_='%d' %a
+        b=val2
+        b_='%d' %b
+        self.label.setText('x = '+a_+'   '+'y = '+b_)
+
+
 
 if __name__=='__main__':
     app=QApplication(sys.argv)
