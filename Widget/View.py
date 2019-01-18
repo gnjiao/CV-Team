@@ -106,7 +106,17 @@ class View(QGraphicsView):
         pass
 
     def adapt_window(self):
-        pass
+        trans=QTransform()
+        scale=pow(2,(self.zoom_slider.value()-250)*0.02)
+        rect=self.viewport().size()
+        scene_rect=self.scene().sceneRect()
+        x_ration=rect.width()/scene_rect.width()
+        y_ration=rect.height()/scene_rect.height()
+        if x_ration<y_ration:
+            y_ration=x_ration
+        trans.scale(1,1)
+        self.zoom_slider.setValue(250)
+        self.setTransform(trans)
     def on_zoom_in(self,value):
         self.zoom_slider.setValue(self.zoom_slider.value() + value)
     def on_zoom_out(self,value):
@@ -117,10 +127,6 @@ class View(QGraphicsView):
         transform.scale(scale,scale)
         self.setTransform(transform)
 
-    # def on_adapt_window(self):
-    #     #     pass
-    #     # def on_drag_mouse(self):
-    #     #     pass
 
 
 if __name__=='__main__':

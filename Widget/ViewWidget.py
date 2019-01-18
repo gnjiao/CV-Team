@@ -71,7 +71,8 @@ class ViewWidget(QWidget):
         self.scene.addItem(item)
         #item.setZvalue(100)
     def fit(self):
-        self.view.on_zoom_in(6)
+        self.view.adapt_window()
+        print('a')
         self.repaint()
     def zoom_in(self):
         self.view.on_zoom_in(6)

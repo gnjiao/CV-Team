@@ -25,17 +25,18 @@ class OperatorBaseWidget(QDialog):
 
         )
         tab_widget.setTabPosition(QTabWidget.South)
-        page_data=QFrame(tab_widget)
-        tab_widget.addTab(page_data,self.tr(u'tab1'))
-        page_data2=QFrame(tab_widget)
-        tab_widget.addTab(page_data2,self.tr(u'tab2'))
+        page_in=QFrame(tab_widget)
+        tab_widget.addTab(page_in,self.tr(u'tab1'))
+        page_out=QFrame(tab_widget)
+        tab_widget.addTab(page_out,self.tr(u'tab2'))
         tool_bar=QToolBar()
         tool_bar.setStyleSheet("QToolBar{color:black}" 
                                "QToolBar:hover{color:red}"
                                "QToolBar{background-color:lightgray}"
                                "QToolBar{border:2px}"
                                "QToolBar{border-radius:5px}"
-                               "QToolBar{padding:2px 4px}")
+                               "QToolBar{padding:2px 4px}"
+                               )
 
         tool_bar.setIconSize(QSize(24, 24))
         action_load_img = QAction(QIcon(QPixmap("../image/cv_team.jpg")), self.tr(u'load img'), self)
