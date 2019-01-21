@@ -12,15 +12,13 @@ class Calliper:
         self.gray=None
         self.polar_property=0
         self.result_type=0
-        self.threshold=2
+        self.threshold=50
         self.result=list()
         self.A = rect_corners[0]
         self.B = rect_corners[1]
         self.C = rect_corners[2]
         self.D = rect_corners[3]
-
         self.points_out=list()
-
         self.AB = np.array([[self.B.x - self.A.x], [self.B.y - self.A.y]])
         self.AD = np.array([[self.D.x - self.A.x], [self.D.y - self.A.y]])
         theta=math.atan2(self.AB[1],self.AB[0]) - math.atan2(self.AD[1],self.AD[0])
@@ -48,7 +46,6 @@ class Calliper:
                 unit_AB=(j+1)*self.AB/self.AB_count
                 next_x = round(float(first_x + unit_AB[0]))
                 next_y = round(float(first_y + unit_AB[1]))
-                #a=float(self.gray[51][30]) - float(self.gray[52][30])
                 self.temp_diff[j][i]=float(self.gray[next_x][next_y])-float(self.gray[self.location_x][self.location_y])
 
                 if self.temp_diff[j][i]>self.threshold:
@@ -57,6 +54,7 @@ class Calliper:
                     self.diff[j][i]+=0
                 self.location_x=next_x
                 self.location_y=next_y
+                print(self.diff)
         self.find_point(self.diff)
         # self.get_result()
     def set_img(self,path):

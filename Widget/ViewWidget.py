@@ -69,7 +69,6 @@ class ViewWidget(QWidget):
         self.pix_map_item.setPos(0,0)
         self.scene.setSceneRect(-10,-10,self.pix_map_item.pixmap().width()+20,self.pix_map_item.pixmap().height()+20)
         self.view.setScene(self.scene)
-        print(self.view.viewport().width(),self.view.viewport().height())
         self.adapt_window()
         #self.pix_map = QPixmap("./image/cv_team.jpg")
 

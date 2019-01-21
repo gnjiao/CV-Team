@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from Geometry.myPoint import myPoint
-
+from Geometry.myRect import myRect
 import math
 
 class RectItem(QGraphicsItem):
@@ -84,16 +84,20 @@ class RectItem(QGraphicsItem):
             self.prepareGeometryChange()
             self.update()
 
-        #print('mouse move')
         QGraphicsItem.mouseMoveEvent(self,event)
+
     def hoverMoveEvent(self, event):
-        #print(self.is_in_area(event.pos(), self.rect.A, 10),'is that in a')
         if self.is_in_area(event.pos(), self.rect.A, 5) or self.is_in_area(event.pos(), self.rect.B, 5) \
                 or self.is_in_area(event.pos(), self.rect.C, 5) or self.is_in_area(event.pos(), self.rect.D, 5):
             self.setCursor(Qt.SizeAllCursor)
         else:
             self.setCursor(Qt.ArrowCursor)
         QGraphicsItem.hoverMoveEvent(self,event)
+
+    def get_rect(self):
+        center_=self.rect.center
+        scene_center=self.mapToScene(QPointF(center_.x,center_.y))
+        return myRect(myPoint(scene_center.x(),scene_center.y()),self.rect.width,self.rect.height,self.rect.direction)
 
     @staticmethod
     def is_in_area(pos,other,tolerance):

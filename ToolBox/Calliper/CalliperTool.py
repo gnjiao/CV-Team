@@ -12,18 +12,12 @@ import sys
 class CalliperTool(OperatorBaseWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.rect=myRect(myPoint(50,50),100,50)
-        self.rect_items=list()
-        self.rect_items.append(RectItem(self.rect))
-        self.view_widget.add_item(self.rect_items[0])
-        rect_corn=list()
-        rect_corn.append(self.rect_items[0].rect.A)
-        rect_corn.append(self.rect_items[0].rect.B)
-        rect_corn.append(self.rect_items[0].rect.C)
-        rect_corn.append(self.rect_items[0].rect.D)
-        self.calliper=Calliper(rect_corn)
-
-        self.rect_items[0].setZValue(100)
+        self.rect=myRect(myPoint(50,50),100,50,myPoint(0.6,0.8))
+        self.rect_item=RectItem(self.rect)
+        self.view_widget.add_item(self.rect_item)
+        self.rect_corn=list()
+        self.calliper=None
+        self.rect_item.setZValue(100)
         self.selected_item=None
 
     def on_load_image(self):
@@ -32,10 +26,10 @@ class CalliperTool(OperatorBaseWidget):
         img.load(file_name)
         self.view_widget.set_image(img)
 
-    def on_add_item(self):
-        self.rect_items.append(RectItem(self.rect))
-        self.view_widget.add_item(self.rect_items[-1])
-        self.rect_items[-1].setZValue(100)
+    # def on_add_item(self):
+    #     self.rect_item.append(RectItem(self.rect))
+    #     self.view_widget.add_item(self.rect_items[-1])
+    #     self.rect_items[-1].setZValue(100)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Delete:
@@ -46,6 +40,17 @@ class CalliperTool(OperatorBaseWidget):
                     self.rect_items.remove(self.rect_items[i])
                     break
             self.view_widget.scene.removeItem(self.selected_item)
+
+    def on_exec(self):
+        self.rect=self.rect_item.get_rect()
+        print('rect:', self.rect.A.x, self.rect.A.y, self.rect.B.x, self.rect.B.y,
+                            self.rect.C.x, self.rect.C.y, self.rect.D.x, self.rect.D.y)
+
+        self.rect_corn.append(self.rect.A)
+        self.rect_corn.append(self.rect.B)
+        self.rect_corn.append(self.rect.C)
+        self.rect_corn.append(self.rect.D)
+        self.calliper=Calliper(self.rect_corn)
 
 
 
