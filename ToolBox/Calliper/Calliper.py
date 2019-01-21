@@ -30,7 +30,7 @@ class Calliper:
         self.AD_count = int(LA.norm(self.AD))
         self.diff = np.zeros([self.AB_count-1, self.AD_count])
         self.temp_diff = np.zeros([self.AB_count-1, self.AD_count])
-        self.set_img('../../image/cv_team.jpg')
+        self.set_img('../../image/text_diff.jpg')
         if self.src_img.shape[2]!=1:
             self.img_to_gray()
         else:
@@ -54,7 +54,7 @@ class Calliper:
                     self.diff[j][i]+=0
                 self.location_x=next_x
                 self.location_y=next_y
-                print(self.diff)
+        print(self.diff)
         self.find_point(self.diff)
         # self.get_result()
     def set_img(self,path):
@@ -76,7 +76,6 @@ class Calliper:
                     count_num=count_num+1
             if count_num>self.AD_count/3 or col_sum>self.AD_count/5*self.threshold:
                 sort_x=i
-                print(sort_x)
                 break
         if count_num==0:
             pass
@@ -91,9 +90,9 @@ class Calliper:
 
 if __name__=='__main__':
     rect_corn=list()
-    rect_corn.append(myPoint(50,30))
-    rect_corn.append(myPoint(100,30))
-    rect_corn.append(myPoint(100, 60))
-    rect_corn.append(myPoint(50, 60))
+    rect_corn.append(myPoint(0,0))
+    rect_corn.append(myPoint(5,0))
+    rect_corn.append(myPoint(5, 5))
+    rect_corn.append(myPoint(0, 5))
     calliper=Calliper(rect_corn)
-    print(calliper.temp_diff)
+    #print(calliper.diff)
