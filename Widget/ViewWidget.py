@@ -11,6 +11,7 @@ from Geometry.FindLineItem import FindLineItem
 from Geometry.myLine import myLine
 from Geometry.myPoint import myPoint
 from Geometry.myRect import myRect
+
 class ViewWidget(QWidget):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
@@ -18,23 +19,24 @@ class ViewWidget(QWidget):
         self.scene=QGraphicsScene()
         self.view=View(self)
         self.pix_map=None
+        self.pix_map_item = None
         hbox=QHBoxLayout()
         vbox=QVBoxLayout()
+
         #适应屏幕按钮
         tool_button_fit=QToolButton(self)
-        tool_button_fit.setIcon(QIcon(QPixmap('../image/cv_team.jpg')))
+        tool_button_fit.setIcon(QIcon(QPixmap("C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")))
         tool_button_fit.clicked.connect(self.fit)
-
         hbox.addWidget(tool_button_fit)
 
         #放大缩小按钮
         tool_button_zoom_in=QToolButton(self)
-        tool_button_zoom_in.setIcon(QIcon(QPixmap('../image/cv_team.jpg')))
+        tool_button_zoom_in.setIcon(QIcon(QPixmap("C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")))
         hbox.addWidget(tool_button_zoom_in)
         tool_button_zoom_in.clicked.connect(self.zoom_in)
 
         tool_button_zoom_out=QToolButton(self)
-        tool_button_zoom_out.setIcon(QIcon(QPixmap('../image/cv_team.jpg')))
+        tool_button_zoom_out.setIcon(QIcon(QPixmap("C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")))
         hbox.addWidget(tool_button_zoom_out)
         tool_button_zoom_out.clicked.connect(self.zoom_out)
 
@@ -47,6 +49,7 @@ class ViewWidget(QWidget):
         hbox.addWidget(self.label)
         vbox.addLayout(hbox)
         self.setLayout(vbox)
+
         # self.setStyleSheet(
         #     "QWidget{color:black}"
         #     "QWidget:hover{color:red}"
@@ -56,23 +59,25 @@ class ViewWidget(QWidget):
         # )
 
 
-        #
+        #信号与槽函数
         self.view.signal_mouse_move[int,int].connect(self.on_mouse_move)
 
-        self.pix_map_item=None
     def set_image(self,image):
+        self.scene.removeItem(self.pix_map_item)
         self.pix_map_item = QGraphicsPixmapItem(QPixmap(image))
         self.scene.addItem(self.pix_map_item)
-        #pix_map_item.setZValue(0)
+        self.pix_map_item.setPos(0,0)
+        self.scene.setSceneRect(-10,-10,self.pix_map_item.pixmap().width()+20,self.pix_map_item.pixmap().height()+20)
         self.view.setScene(self.scene)
+        print(self.view.viewport().width(),self.view.viewport().height())
+        self.adapt_window()
         #self.pix_map = QPixmap("./image/cv_team.jpg")
 
     def add_item(self,item):
         self.scene.addItem(item)
         #item.setZvalue(100)
     def fit(self):
-        self.view.adapt_window()
-        print('a')
+        self.adapt_window()
         self.repaint()
     def zoom_in(self):
         self.view.on_zoom_in(6)
@@ -86,7 +91,17 @@ class ViewWidget(QWidget):
         b=val2
         b_='%d' %b
         self.label.setText('x = '+a_+'   '+'y = '+b_)
-
+    def adapt_window(self):
+        trans = QTransform()
+        scale=pow(2,(self.view.zoom_slider.value()-250)*0.02)
+        scene_rect=self.scene.sceneRect()
+        x_ration=self.view.viewport().width()/scene_rect.width()
+        y_ration=self.view.viewport().height()/scene_rect.height()
+        if x_ration<y_ration:
+            y_ration=x_ration
+        trans.scale(y_ration,y_ration)
+        self.view.reset_view()
+        self.view.setTransform(trans)
 
 
 if __name__=='__main__':

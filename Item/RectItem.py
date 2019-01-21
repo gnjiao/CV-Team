@@ -13,6 +13,7 @@ class RectItem(QGraphicsItem):
 
         self.setFlag(QGraphicsItem.ItemIsSelectable)
         self.setFlag(QGraphicsItem.ItemIsMovable,True)
+        self.setFlag(QGraphicsItem.ItemIsFocusable, True)
         self.setAcceptHoverEvents(True)
         #self.setFlag(QGraphicsItem.ItemIgnoresTransformations)
 
@@ -20,11 +21,15 @@ class RectItem(QGraphicsItem):
         pen = QPen()
         pen.setColor(Qt.red)
         painter.setPen(pen)
+        painter.setRenderHint(QPainter.Antialiasing, True)
+        if self.isSelected():
+            painter.setPen(Qt.yellow)
+        else:
+            painter.setPen(Qt.red)
         painter.drawLine(self.rect.A.x, self.rect.A.y, self.rect.B.x, self.rect.B.y)
         painter.drawLine(self.rect.B.x, self.rect.B.y, self.rect.C.x, self.rect.C.y)
         painter.drawLine(self.rect.C.x, self.rect.C.y, self.rect.D.x, self.rect.D.y)
         painter.drawLine(self.rect.D.x, self.rect.D.y, self.rect.A.x, self.rect.A.y)
-
 
     def boundingRect(self):
         x_list=[self.rect.A.x,self.rect.B.x,self.rect.C.x,self.rect.D.x]

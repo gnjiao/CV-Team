@@ -39,18 +39,23 @@ class OperatorBaseWidget(QDialog):
                                )
 
         tool_bar.setIconSize(QSize(24, 24))
-        action_load_img = QAction(QIcon(QPixmap("../image/cv_team.jpg")), self.tr(u'load img'), self)
+        action_load_img = QAction(QIcon(QPixmap(r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")), self.tr(u'load img'), self)
         tool_bar.addAction(action_load_img)
-        action_exec = QAction(QIcon(QPixmap("../image/cv_team.jpg")), self.tr(u'exec'), self)
+        action_exec = QAction(QIcon(QPixmap(r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")), self.tr(u'exec'), self)
         tool_bar.addAction(action_exec)
-        action_stop = QAction(QIcon(QPixmap("../image/cv_team.jpg")), self.tr(u'stop'), self)
+        action_stop = QAction(QIcon(QPixmap(r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")), self.tr(u'stop'), self)
         tool_bar.addAction(action_stop)
-        action_load_video = QAction(QIcon(QPixmap("../image/cv_team.jpg")), self.tr(u'load video'), self)
+        action_load_video = QAction(QIcon(QPixmap(r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")), self.tr(u'load video'), self)
         tool_bar.addAction(action_load_video)
+        action_add_item = QAction(QIcon(QPixmap("C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")), self.tr(u'load video'), self)
+        tool_bar.addAction(action_add_item)
+        action_load_img.triggered.connect(self.on_load_image)
+        action_exec.triggered.connect(self.on_exec)
+        action_stop.triggered.connect(self.on_stop)
+        action_load_video.triggered.connect(self.on_load_video)
+        action_add_item.triggered.connect(self.on_add_item)
 
-        hlay=QHBoxLayout()
         vlay=QVBoxLayout()
-        # vlay1 = QVBoxLayout()
         splitter = QSplitter(Qt.Horizontal)
 
         self.view_widget=ViewWidget()
@@ -84,8 +89,17 @@ class OperatorBaseWidget(QDialog):
         vlay3.addLayout(vlay2)
         vlay3.addWidget(label)
         self.setLayout(vlay3)
-
-
+        # 连接信号与槽
+    def on_load_image(self):
+        pass
+    def on_exec(self):
+        pass
+    def on_stop(self):
+        pass
+    def on_load_video(self):
+        pass
+    def on_add_item(self):
+        pass
 
 if __name__=='__main__':
     app = QApplication(sys.argv)
@@ -96,11 +110,13 @@ if __name__=='__main__':
     rect = myRect(point1, width, height, dir)
     line=myLine(myPoint(50,50),myPoint(146,50))
     rect_item = RectItem(rect)#RectItem(rect)
-    operater_base=OperatorBaseWidget()
-    img=QImage("../image/hh.bmp")
-    operater_base.view_widget.set_image(img)
-    operater_base.view_widget.add_item(rect_item)
-    operater_base.show()
-    operater_base.resize(800,600)
+    operator_base=OperatorBaseWidget()
+    img=QImage("../image/cv_team.jpg")
+    operator_base.view_widget.set_image(img)
+    operator_base.view_widget.add_item(rect_item)
+
+
+    operator_base.show()
+    operator_base.resize(800,600)
     #window.showMaximized()
     app.exec()

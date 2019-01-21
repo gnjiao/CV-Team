@@ -4,7 +4,6 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 import sys
-import math
 
 class View(QGraphicsView):
     signal_mouse_move=pyqtSignal(int,int)
@@ -36,6 +35,8 @@ class View(QGraphicsView):
             "QGraphicsView{border:0px}"
             "QGraphicsView{border-radius:5px}"
         )
+
+
     # def keyPressEvent(self, event):
     #     if event.key()==Qt.Key_0:
     #         print('a')
@@ -77,9 +78,9 @@ class View(QGraphicsView):
             self.verticalScrollBar().setSliderPosition(b)
 
 
-    def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Control:
-            self.key_press=True
+    # def keyPressEvent(self, event):
+    #     if event.key() == Qt.Key_Control:
+    #         self.key_press=True
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Control:
             self.key_press=False
@@ -105,28 +106,19 @@ class View(QGraphicsView):
     def qimage_cvmat(self):
         pass
 
-    def adapt_window(self):
-        trans=QTransform()
-        scale=pow(2,(self.zoom_slider.value()-250)*0.02)
-        rect=self.viewport().size()
-        scene_rect=self.scene().sceneRect()
-        x_ration=rect.width()/scene_rect.width()
-        y_ration=rect.height()/scene_rect.height()
-        if x_ration<y_ration:
-            y_ration=x_ration
-        trans.scale(1,1)
-        self.zoom_slider.setValue(250)
-        self.setTransform(trans)
     def on_zoom_in(self,value):
         self.zoom_slider.setValue(self.zoom_slider.value() + value)
     def on_zoom_out(self,value):
         self.zoom_slider.setValue(self.zoom_slider.value() - value)
     def on_set_matrix(self):
-        scale=math.pow(2,(self.zoom_slider.value()-250)*0.02)
+        scale=pow(2,(self.zoom_slider.value()-250)*0.02)
         transform=QTransform()
         transform.scale(scale,scale)
         self.setTransform(transform)
-
+    def reset_view(self):
+        self.zoom_slider.setValue(250)
+        self.on_set_matrix()
+        self.ensureVisible(0, 0, 0, 0)
 
 
 if __name__=='__main__':
