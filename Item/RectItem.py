@@ -20,6 +20,7 @@ class RectItem(QGraphicsItem):
     def paint(self, painter, option, widget=None):
         pen = QPen()
         pen.setColor(Qt.red)
+        pen.setWidth(0)
         painter.setPen(pen)
         painter.setRenderHint(QPainter.Antialiasing, True)
         if self.isSelected():
@@ -30,6 +31,9 @@ class RectItem(QGraphicsItem):
         painter.drawLine(self.rect.B.x, self.rect.B.y, self.rect.C.x, self.rect.C.y)
         painter.drawLine(self.rect.C.x, self.rect.C.y, self.rect.D.x, self.rect.D.y)
         painter.drawLine(self.rect.D.x, self.rect.D.y, self.rect.A.x, self.rect.A.y)
+        BC=(self.rect.B+self.rect.C)/2
+        p=QPointF(BC.x,BC.y)
+        painter.drawEllipse(p,5,5)
 
     def boundingRect(self):
         x_list=[self.rect.A.x,self.rect.B.x,self.rect.C.x,self.rect.D.x]
@@ -37,7 +41,17 @@ class RectItem(QGraphicsItem):
         x_list.sort()
         y_list.sort()
         return QRectF(x_list[0]-5, y_list[0]-5, x_list[3]-x_list[0]+10, y_list[3]-y_list[0]+10)
-
+    def shape(self):
+        path=QPainterPath()
+        points=list()
+        points.append(QPointF(self.rect.A.x, self.rect.A.y))
+        points.append(QPointF(self.rect.B.x, self.rect.B.y))
+        points.append(QPointF(self.rect.C.x, self.rect.C.y))
+        points.append(QPointF(self.rect.D.x, self.rect.D.y))
+        points.append(QPointF(self.rect.A.x, self.rect.A.y))
+        poly=QPolygonF(points)
+        path.addPolygon(poly)
+        return path
 
     def mousePressEvent(self, event):
         if self.is_in_area(event.pos(), self.rect.A, 5):

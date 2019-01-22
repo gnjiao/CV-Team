@@ -125,8 +125,9 @@ if __name__=='__main__':
     app = QApplication(sys.argv)
     view = View()
     scene = QGraphicsScene()
-    pix_map_item = QGraphicsPixmapItem(QPixmap('./image/cv_team.jpg'))
+    pix_map_item = QGraphicsPixmapItem(QPixmap('../image/cv_team.jpg'))
     scene.addItem(pix_map_item)
+
     view.setScene(scene)
     view.show()
     app.exec()

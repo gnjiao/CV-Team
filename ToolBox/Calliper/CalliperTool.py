@@ -12,13 +12,14 @@ import sys
 class CalliperTool(OperatorBaseWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.rect=myRect(myPoint(50,50),100,50,myPoint(0.6,0.8))
+        self.rect=myRect(myPoint(40,210),20,10,myPoint(0,1))
         self.rect_item=RectItem(self.rect)
         self.view_widget.add_item(self.rect_item)
         self.rect_corn=list()
         self.calliper=None
         self.rect_item.setZValue(100)
         self.selected_item=None
+
 
     def on_load_image(self):
         file_name,_=QFileDialog.getOpenFileName(None,'载入图片',r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image")
@@ -45,13 +46,22 @@ class CalliperTool(OperatorBaseWidget):
         self.rect=self.rect_item.get_rect()
         print('rect:', self.rect.A.x, self.rect.A.y, self.rect.B.x, self.rect.B.y,
                             self.rect.C.x, self.rect.C.y, self.rect.D.x, self.rect.D.y)
-
+        self.rect_corn.clear()
         self.rect_corn.append(self.rect.A)
         self.rect_corn.append(self.rect.B)
         self.rect_corn.append(self.rect.C)
         self.rect_corn.append(self.rect.D)
         self.calliper=Calliper(self.rect_corn)
+        #print(self.calliper.points_out[0].x,self.calliper.points_out[0].y,self.calliper.points_out[1].x)
+        #line=QGraphicsLineItem(self.calliper.points_out[0].x,self.calliper.points_out[0].y,self.calliper.points_out[1].x,self.calliper.points_out[1].y)
 
+
+        #line = QGraphicsLineItem(4, 8, 120, 100)
+        pen=QPen(Qt.red)
+        #line.setPen(pen)
+        #self.view_widget.scene.addItem(line)
+        #self.update()
+        #self.view_widget.addItem(line)
 
 
 if __name__=='__main__':

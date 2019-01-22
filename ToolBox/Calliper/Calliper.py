@@ -12,7 +12,7 @@ class Calliper:
         self.gray=None
         self.polar_property=0
         self.result_type=0
-        self.threshold=50
+        self.threshold=0
         self.result=list()
         self.A = rect_corners[0]
         self.B = rect_corners[1]
@@ -22,7 +22,7 @@ class Calliper:
         self.AB = np.array([[self.B.x - self.A.x], [self.B.y - self.A.y]])
         self.AD = np.array([[self.D.x - self.A.x], [self.D.y - self.A.y]])
         theta=math.atan2(self.AB[1],self.AB[0]) - math.atan2(self.AD[1],self.AD[0])
-        print((180/math.pi)*theta)
+        #print((180/math.pi)*theta)
         if theta==0:
             print('in a line')
             return
@@ -30,12 +30,13 @@ class Calliper:
         self.AD_count = int(LA.norm(self.AD))
         self.diff = np.zeros([self.AB_count-1, self.AD_count])
         self.temp_diff = np.zeros([self.AB_count-1, self.AD_count])
-        self.set_img('../../image/text_diff.jpg')
+        self.set_img('../../image/test.jpg')
         if self.src_img.shape[2]!=1:
             self.img_to_gray()
         else:
             self.gray=self.src_img
 
+        print('self.gray:',self.gray)
         for i in range (self.AD_count):
             unit_AD=(i*self.AD/self.AD_count)
             first_x = round(float(self.A.x + unit_AD[0]))
@@ -46,6 +47,7 @@ class Calliper:
                 unit_AB=(j+1)*self.AB/self.AB_count
                 next_x = round(float(first_x + unit_AB[0]))
                 next_y = round(float(first_y + unit_AB[1]))
+                print('gray:',float(self.gray[next_x][next_y]),float(self.gray[self.location_x][self.location_y]))
                 self.temp_diff[j][i]=float(self.gray[next_x][next_y])-float(self.gray[self.location_x][self.location_y])
 
                 if self.temp_diff[j][i]>self.threshold:
