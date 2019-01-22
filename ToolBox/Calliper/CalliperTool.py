@@ -12,7 +12,7 @@ import sys
 class CalliperTool(OperatorBaseWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.rect=myRect(myPoint(40,210),20,10,myPoint(0,1))
+        self.rect=myRect(myPoint(40,40),20,10,myPoint(1,0))
         self.rect_item=RectItem(self.rect)
         self.view_widget.add_item(self.rect_item)
         self.rect_corn=list()

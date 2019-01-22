@@ -12,7 +12,7 @@ class Calliper:
         self.gray=None
         self.polar_property=0
         self.result_type=0
-        self.threshold=0
+        self.threshold=60
         self.result=list()
         self.A = rect_corners[0]
         self.B = rect_corners[1]
@@ -28,32 +28,30 @@ class Calliper:
             return
         self.AB_count = int(LA.norm(self.AB))
         self.AD_count = int(LA.norm(self.AD))
-        self.diff = np.zeros([self.AB_count-1, self.AD_count])
-        self.temp_diff = np.zeros([self.AB_count-1, self.AD_count])
+        self.diff = np.zeros([self.AD_count-1, self.AB_count])
+        self.temp_diff = np.zeros([self.AD_count-1, self.AB_count])
         self.set_img('../../image/test.jpg')
+        #print(self.src_img.shape)
         if self.src_img.shape[2]!=1:
             self.img_to_gray()
         else:
             self.gray=self.src_img
-
-        print('self.gray:',self.gray)
-        for i in range (self.AD_count):
-            unit_AD=(i*self.AD/self.AD_count)
-            first_x = round(float(self.A.x + unit_AD[0]))
-            first_y = round(float(self.A.y + unit_AD[1]))
+        for i in range (self.AB_count):
+            unit_AB=(i*self.AB/self.AB_count)
+            first_x = round(float(self.A.x + unit_AB[0]))
+            first_y = round(float(self.A.y + unit_AB[1]))
             self.location_x=first_x
             self.location_y=first_y
-            for j in range(self.AB_count-1):
-                unit_AB=(j+1)*self.AB/self.AB_count
-                next_x = round(float(first_x + unit_AB[0]))
-                next_y = round(float(first_y + unit_AB[1]))
-                print('gray:',float(self.gray[next_x][next_y]),float(self.gray[self.location_x][self.location_y]))
-                self.temp_diff[j][i]=float(self.gray[next_x][next_y])-float(self.gray[self.location_x][self.location_y])
-
-                if self.temp_diff[j][i]>self.threshold:
-                    self.diff[j][i]=self.diff[j][i]+self.temp_diff[j][i]
+            for j in range(self.AD_count-1):
+                unit_AD=(j+1)*self.AD/self.AD_count
+                next_x = round(float(first_x + unit_AD[0]))
+                next_y = round(float(first_y + unit_AD[1]))
+                self.temp_diff[i][j]=float(self.gray[next_x][next_y])-float(self.gray[self.location_x][self.location_y])
+                self.diff[i][j] =  self.temp_diff[i][j]
+                if self.temp_diff[i][j]>self.threshold:
+                    pass
                 else:
-                    self.diff[j][i]+=0
+                    self.diff[i][j]+=0
                 self.location_x=next_x
                 self.location_y=next_y
         print(self.diff)
@@ -92,9 +90,9 @@ class Calliper:
 
 if __name__=='__main__':
     rect_corn=list()
-    rect_corn.append(myPoint(0,0))
-    rect_corn.append(myPoint(5,0))
-    rect_corn.append(myPoint(5, 5))
-    rect_corn.append(myPoint(0, 5))
+    rect_corn.append(myPoint(10,18))
+    rect_corn.append(myPoint(30,18))
+    rect_corn.append(myPoint(30, 61))
+    rect_corn.append(myPoint(10, 61))
     calliper=Calliper(rect_corn)
     #print(calliper.diff)
