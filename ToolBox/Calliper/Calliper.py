@@ -5,9 +5,8 @@ import cv2
 
 from Geometry.myPoint import myPoint
 
-
 class Calliper:
-    def __init__(self,rect_corners):
+    def __init__(self):
         self.src_img=None
         self.gray=None
         self.polar_property=0
@@ -15,6 +14,7 @@ class Calliper:
         self.threshold=120
         self.compensate=0
         self.result=list()
+        
         self.rect_corners=rect_corners
         self.A = self.rect_corners[0]
         self.B = self.rect_corners[1]
@@ -35,15 +35,11 @@ class Calliper:
         self.diff = np.zeros([self.AD_count-1, self.AB_count])
         self.temp_diff = np.zeros([self.AD_count-1, self.AB_count])
         #self.set_img('../../image/cv_team.jpg')
-        #print(self.src_img.shape)
-        if self.src_img.shape[2]!=1:
-            self.img_to_gray()
-        else:
-            self.gray=self.src_img
-        self.Exec()
+    def set_corePara(self):
+        pass
     def Exec(self):
         if self.gray is None or self.rect_corners is None:
-            return 
+            return
         for i in range (self.AB_count):
             unit_AB=(i*self.AB/self.AB_count)
             first_x = round(float(self.A.x + unit_AB[0]))
@@ -63,10 +59,11 @@ class Calliper:
                 self.location_y=next_y
         print(self.diff)
         self.find_point(self.diff)
-    def set_img(self,path):
-        self.src_img=cv2.imread(path)
-    def img_to_gray(self):
-        self.gray= cv2.cvtColor(self.src_img,cv2.COLOR_BGR2GRAY)
+    def convert(self):
+        if self.src_img.shape[2]!=1:
+            self.gray= cv2.cvtColor(self.src_img,cv2.COLOR_BGR2GRAY)
+        else:
+            self.gray=self.src_img
     def find_point(self,diff):
         count_num=0
         sort_x=0

@@ -1,4 +1,4 @@
-import numpy
+import cv2
 
-a=numpy.zeros([3,3])
-print(a)
+img=cv2.imread('./image./test.jpg')
+print(img[3][6])
