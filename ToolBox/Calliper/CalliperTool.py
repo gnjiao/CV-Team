@@ -12,21 +12,22 @@ import sys
 class CalliperTool(OperatorBaseWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.rect=myRect(myPoint(40,40),20,10,myPoint(1,0))
+        self.rect=myRect(myPoint(40,40),20,10,myPoint(0.6,0.8))
         self.rect_item=RectItem(self.rect)
         self.view_widget.add_item(self.rect_item)
         self.rect_corn=list()
         self.calliper=None
         self.rect_item.setZValue(100)
         self.selected_item=None
-
+        self.line=None
+        self.calliper = Calliper(self.rect_corn)
 
     def on_load_image(self):
         file_name,_=QFileDialog.getOpenFileName(None,'载入图片',r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image")
         img=QImage()
         img.load(file_name)
         self.view_widget.set_image(img)
-
+        self.calliper.set_img(file_name)
     # def on_add_item(self):
     #     self.rect_item.append(RectItem(self.rect))
     #     self.view_widget.add_item(self.rect_items[-1])
@@ -52,24 +53,21 @@ class CalliperTool(OperatorBaseWidget):
         self.rect_corn.append(self.rect.C)
         self.rect_corn.append(self.rect.D)
         self.calliper=Calliper(self.rect_corn)
-        #print(self.calliper.points_out[0].x,self.calliper.points_out[0].y,self.calliper.points_out[1].x)
-        #line=QGraphicsLineItem(self.calliper.points_out[0].x,self.calliper.points_out[0].y,self.calliper.points_out[1].x,self.calliper.points_out[1].y)
-
-
-        #line = QGraphicsLineItem(4, 8, 120, 100)
+        if self.line is not None:
+            self.view_widget.scene.removeItem(self.line)
+        self.line=QGraphicsLineItem(self.calliper.points_out[0].x,self.calliper.points_out[0].y,self.calliper.points_out[1].x,self.calliper.points_out[1].y)
         pen=QPen(Qt.red)
-        #line.setPen(pen)
-        #self.view_widget.scene.addItem(line)
-        #self.update()
-        #self.view_widget.addItem(line)
+        self.line.setPen(pen)
+        self.view_widget.scene.addItem(self.line)
+        self.update()
+
 
 
 if __name__=='__main__':
     app = QApplication(sys.argv)
     calliper = CalliperTool()
+    calliper.resize(1000,750)
     calliper.show()
     img=QImage("../../image/cv_team.jpg")
     calliper.view_widget.set_image(img)
-    calliper.resize(800,600)
-
     app.exec()

@@ -14,6 +14,7 @@ class OperatorBaseWidget(QDialog):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.setWindowTitle('BaseWidget')
+        self.setWindowFlags(Qt.WindowCloseButtonHint)
         tab_widget=QTabWidget()
         tab_widget.setStyleSheet(
             "QTabWidget{color:black}"
