@@ -1,4 +1,10 @@
 import cv2
+from enum import Enum
 
-img=cv2.imread('./image./test.jpg')
-print(img[3][6])
+
+class State(Enum):
+    Fail=0
+    Success=1
+    Idle=2
+    Running=3
+print(State.Fail.value)

@@ -37,7 +37,9 @@ class Calliper:
         #self.set_img('../../image/cv_team.jpg')
     def set_corePara(self):
         pass
-    def Exec(self):
+    def set_img(self,src_img):
+        pass
+    def Exec(self,in_points,out_points):
         if self.gray is None or self.rect_corners is None:
             return
         for i in range (self.AB_count):

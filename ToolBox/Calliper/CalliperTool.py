@@ -25,7 +25,7 @@ class CalliperTool(OperatorBaseWidget):
         self.rect_corn.append(self.rect.D)
         self.selected_item=None
         self.line=None
-        self.calliper = Calliper(self.rect_corn)
+        self.calliper = Calliper()
 
     def on_load_image(self):
         file_name,_=QFileDialog.getOpenFileName(None,'载入图片',r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image")
