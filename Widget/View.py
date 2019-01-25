@@ -94,18 +94,6 @@ class View(QGraphicsView):
         self.signal_mouse_move.emit(scene_pos.x(), scene_pos.y())
         QGraphicsView.mouseMoveEvent(self,event)
 
-
-
-
-    def set_scene(self):
-        pass
-    def get_mat(self):
-        pass
-    def cvmat_qimage(self):
-        pass
-    def qimage_cvmat(self):
-        pass
-
     def on_zoom_in(self,value):
         self.zoom_slider.setValue(self.zoom_slider.value() + value)
     def on_zoom_out(self,value):

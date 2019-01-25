@@ -17,19 +17,20 @@ class OperatorBaseWidget(QDialog):
         self.setWindowFlags(Qt.WindowCloseButtonHint)
         tab_widget=QTabWidget()
         tab_widget.setStyleSheet(
-            "QTabWidget{color:black}"
-            "QTabWidget:hover{color:red}"
-            "QTabWidget{background-color:lightgray}"
-            "QTabWidget{border:0px}"
-            "QTabWidget{border-radius:10px}"
-            "QTabWidget{padding:2px 4px}"
-
-        )
+                                "QTabWidget{color:black}"
+                                "QTabWidget:hover{color:red}"
+                                "QTabWidget{background-color:lightgray}"
+                                "QTabWidget{border:0px}"
+                                "QTabWidget{border-radius:10px}"
+                                "QTabWidget{padding:2px 4px}"
+                                )
         tab_widget.setTabPosition(QTabWidget.South)
-        page_in=QFrame(tab_widget)
-        tab_widget.addTab(page_in,self.tr(u'tab1'))
-        page_out=QFrame(tab_widget)
-        tab_widget.addTab(page_out,self.tr(u'tab2'))
+        self.base_data=QFrame(tab_widget)
+        tab_widget.addTab(self.base_data,self.tr(u'base data'))
+        self.item_setting=QFrame(tab_widget)
+        tab_widget.addTab(self.item_setting,self.tr(u'item setting'))
+        self.output=QFrame(tab_widget)
+        tab_widget.addTab(self.output,self.tr(u'output data '))
         tool_bar=QToolBar()
         tool_bar.setStyleSheet("QToolBar{color:black}" 
                                "QToolBar:hover{color:red}"
@@ -40,22 +41,21 @@ class OperatorBaseWidget(QDialog):
                                )
 
         tool_bar.setIconSize(QSize(24, 24))
-        action_load_img = QAction(QIcon(QPixmap(r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")), self.tr(u'load img'), self)
-        tool_bar.addAction(action_load_img)
+        self.action_load_img = QAction(QIcon(QPixmap(r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")), self.tr(u'load img'), self)
+        tool_bar.addAction(self.action_load_img)
         action_exec = QAction(QIcon(QPixmap(r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")), self.tr(u'exec'), self)
         tool_bar.addAction(action_exec)
         action_stop = QAction(QIcon(QPixmap(r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")), self.tr(u'stop'), self)
         tool_bar.addAction(action_stop)
         action_load_video = QAction(QIcon(QPixmap(r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")), self.tr(u'load video'), self)
         tool_bar.addAction(action_load_video)
-        action_add_item = QAction(QIcon(QPixmap("C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")), self.tr(u'load video'), self)
+        action_add_item = QAction(QIcon(QPixmap("C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\Geo.ico")), self.tr(u'add item'), self)
         tool_bar.addAction(action_add_item)
-        action_load_img.triggered.connect(self.on_load_image)
+        self.action_load_img.triggered.connect(self.on_load_image)
         action_exec.triggered.connect(self.on_exec)
         action_stop.triggered.connect(self.on_stop)
         action_load_video.triggered.connect(self.on_load_video)
         action_add_item.triggered.connect(self.on_add_item)
-
         vlay=QVBoxLayout()
         splitter = QSplitter(Qt.Horizontal)
 
@@ -115,8 +115,6 @@ if __name__=='__main__':
     img=QImage("../image/cv_team.jpg")
     operator_base.view_widget.set_image(img)
     operator_base.view_widget.add_item(rect_item)
-
-
     operator_base.show()
     operator_base.resize(800,600)
     #window.showMaximized()

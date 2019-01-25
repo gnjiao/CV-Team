@@ -97,7 +97,6 @@ class RectItem(QGraphicsItem):
             self.rect = self.rect.rotate_to(myPoint(event.pos().x(), event.pos().y()))
             self.prepareGeometryChange()
             self.update()
-
         QGraphicsItem.mouseMoveEvent(self,event)
 
     def hoverMoveEvent(self, event):
