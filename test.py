@@ -9,3 +9,10 @@ print(qimg.width(),qimg.height())
 
 src=cv2.imread(r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.png")
 print(src.shape)
+
+this is test for my gihub
+
+
+
+
+
