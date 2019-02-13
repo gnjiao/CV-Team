@@ -83,6 +83,7 @@ class OperatorBaseWidget(QDialog):
         right_widget=QWidget()
         right_widget.setLayout(vlay)
         splitter.addWidget(right_widget)
+        splitter.setSizes([315, 685])
 
         vlay2=QVBoxLayout()
         vlay2.addWidget(splitter)

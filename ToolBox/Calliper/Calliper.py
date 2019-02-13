@@ -48,7 +48,6 @@ class Calliper:
         self.AB = np.array([[self.B.x - self.A.x], [self.B.y - self.A.y]])
         self.AD = np.array([[self.D.x - self.A.x], [self.D.y - self.A.y]])
         theta=math.atan2(self.AB[1],self.AB[0]) - math.atan2(self.AD[1],self.AD[0])
-        #print((180/math.pi)*theta)
         if theta==0:
             return State.Fail.value
         self.AB_count = int(LA.norm(self.AB))
@@ -72,7 +71,7 @@ class Calliper:
                     self.diff[j][i]+=0
                 self.location_x=next_x
                 self.location_y=next_y
-        print('self.diff',self.diff)
+        #print('self.diff',self.diff)
         return self.find_point(self.diff)
     def find_point(self,diff):
         col_num=0

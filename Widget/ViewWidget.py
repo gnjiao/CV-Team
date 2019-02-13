@@ -7,7 +7,7 @@ import sys
 from Widget.View import View
 from Item.RectItem import RectItem
 
-from Geometry.FindLineItem import FindLineItem
+
 from Geometry.myLine import myLine
 from Geometry.myPoint import myPoint
 from Geometry.myRect import myRect
