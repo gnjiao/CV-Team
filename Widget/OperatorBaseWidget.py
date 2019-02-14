@@ -75,6 +75,16 @@ class OperatorBaseWidget(QDialog):
         label.setMaximumHeight(25)
         label.setFrameShadow(QFrame.Sunken)
 
+        cancle=QPushButton()
+        cancle.setText('cancel')
+        cancle.setMaximumWidth(100)
+        cancle.clicked.connect(self.on_cancel)
+
+        OK=QPushButton()
+        OK.setText('OK')
+        OK.setMaximumWidth(100)
+        OK.clicked.connect(self.on_OK)
+
         vlay.addWidget(tool_bar)
         vlay.addWidget(self.view_widget)
         # vlay1.addLayout(hlay)
@@ -89,7 +99,11 @@ class OperatorBaseWidget(QDialog):
         vlay2.addWidget(splitter)
         vlay3=QVBoxLayout()
         vlay3.addLayout(vlay2)
-        vlay3.addWidget(label)
+        hlay=QHBoxLayout()
+        hlay.addWidget(label)
+        hlay.addWidget(cancle)
+        hlay.addWidget(OK)
+        vlay3.addLayout(hlay)
         self.setLayout(vlay3)
         # 连接信号与槽
     def on_load_image(self):
@@ -102,6 +116,11 @@ class OperatorBaseWidget(QDialog):
         pass
     def on_add_item(self):
         pass
+    def on_cancel(self):
+        pass
+    def on_OK(self):
+        pass
+
 
 if __name__=='__main__':
     app = QApplication(sys.argv)
