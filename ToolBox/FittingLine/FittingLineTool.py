@@ -13,6 +13,7 @@ from Item.PointsItem import PointsItem
 from Item.FindLineItem import FindLineItem
 from ToolBox.FittingLine.FittingLineOperator import FittingLineOperator
 
+from AuxiliaryFile.State import State
 import sys
 import cv2
 
@@ -21,18 +22,16 @@ class FittingLineTool(OperatorBaseWidget):
         super().__init__(*args, **kwargs)
 
         #数据部分
-        self.state=0
+        self.state=State.Idle.value
         #self.rect= myRect(myPoint(40,40),10,20,myPoint(1,0))
         self.src_img=None
-        #self.operator=CalliperOperator()
         self.line=myLine(myPoint(50,50),myPoint(100,100))
         self.line_item=FindLineItem(self.line)
         self.operator=FittingLineOperator()
-        self.operator.rects=self.operator.rects
         self.line_item.setZValue(100)
         self.points_item=None
         self.file_name=None
-
+        self.rects=list()
         #界面部分
         self.setWindowTitle('Calliper Tool')
         group=QGroupBox('this group')
@@ -67,7 +66,7 @@ class FittingLineTool(OperatorBaseWidget):
 
 
         #
-
+    #生成line_item矩形的角点坐标带入到计算中
 
 
 
@@ -96,25 +95,25 @@ class FittingLineTool(OperatorBaseWidget):
 
 
     def on_exec(self):
-        self.rects=self.rect_item.get_rect()
-        # print('rect:', self.rect.A.x, self.rect.A.y, self.rect.B.x, self.rect.B.y,
-        #                     self.rect.C.x, self.rect.C.y, self.rect.D.x, self.rect.D.y)
-        self.operator.rect=self.rect
-        if self.points_item is not None:
-            self.view_widget.scene.removeItem(self.points_item)
-        # if self.line is not None:
-        #     self.view_widget.scene.removeItem(self.line)
-        self.state=self.operator.exec_calliper()
-        if self.state != 0:
-            #self.line=QGraphicsPointItem(self.calliper.points_out[0].x,self.calliper.points_out[0].y,self.calliper.points_out[1].x,self.calliper.points_out[1].y)
+        self.rects=self.line_item.get_rects()
+        self.operator.rects=self.rects
+        self.operator.exec_fitting()
+        print(self.operator.OK,self.operator.NG)
 
-            self.points_item=PointsItem(self.operator.calliper.points_out)
-            pen=QPen(Qt.red)
-            # self.line.setPen(pen)
-            # self.view_widget.add_item(self.line)
-            self.view_widget.add_item(self.points_item)
-        else:
-            return
+        # if self.points_item is not None:
+        #     self.view_widget.scene.removeItem(self.points_item)
+        # # if self.line is not None:
+        # #     self.view_widget.scene.removeItem(self.line)
+        # self.state=self.operator.calliper.exec_calliper()
+        # if self.state != 0:
+        #     #self.line=QGraphicsPointItem(self.calliper.points_out[0].x,self.calliper.points_out[0].y,self.calliper.points_out[1].x,self.calliper.points_out[1].y)
+        #
+        self.points_item=PointsItem(self.operator.OK)
+        #     pen=QPen(Qt.red)
+        #     # self.line.setPen(pen)
+        #     # self.view_widget.add_item(self.line)
+        self.view_widget.add_item(self.points_item)
+
 
     #槽函数定义
     # def on_add_item(self):

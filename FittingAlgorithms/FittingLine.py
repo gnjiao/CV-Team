@@ -20,17 +20,10 @@ class FittingLine:
         self.i=0
     def Ransac(self):
         iter=0
-
         while iter<self.iter:
-            choosed_index1 = numpy.random.randint(0, len(self.points))
-            choosed_index2 = numpy.random.randint(0, len(self.points))
-            # if self.points[choosed_index1].x==self.points[choosed_index2].x and self.points[choosed_index1].y==self.points[choosed_index2].y:
-            #     continue
-
-            # if self.points[choosed_index1].distance_to(self.points[choosed_index2])<2:
-            #     self.i=self.i-1
-            #     continue
-            self.temp_line = myLine(self.points[choosed_index1], self.points[choosed_index2])
+            chose_index1 = numpy.random.randint(0, len(self.points))
+            chose_index2 = numpy.random.randint(0, len(self.points))
+            self.temp_line = myLine(self.points[chose_index1], self.points[chose_index2])
             self.temp_ok_points.clear()
             self.temp_ng_points.clear()
             self.temp_dist = 0

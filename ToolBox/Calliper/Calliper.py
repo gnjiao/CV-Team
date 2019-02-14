@@ -98,7 +98,7 @@ class Calliper:
                                        round(self.B.y + sort_x * self.AD[1][0] / LA.norm(self.AD))))
         self.points_out.append(myPoint(round(self.points_out[0].x+self.points_out[1].x)/2,
                                        round(self.points_out[0].y+self.points_out[1].y)/2))
-        print(self.points_out[2].x,self.points_out[2].y)
+        #print(self.points_out[1].x,self.points_out[1].y)
         return State.Success.value
 if __name__=='__main__':
     rect_corn=list()

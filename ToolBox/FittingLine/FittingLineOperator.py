@@ -17,6 +17,8 @@ class FittingLineOperator:
         self.input_points=list()      #卡尺的输入点
         self.output_points=list()     #卡尺的输出点
         self.fitting_line=None
+        self.OK=list()
+        self.NG=list()
         self.result=None
         self.output_points_enable=0
 
@@ -38,17 +40,15 @@ class FittingLineOperator:
         self.state=State.Running.value
         for i in range(len(self.rects)):
             self.input_points.clear()
+            self.output_points.clear()
             self.input_points.append(self.rects[i].A)
             self.input_points.append(self.rects[i].B)
             self.input_points.append(self.rects[i].C)
             self.input_points.append(self.rects[i].D)
-            self.state = self.calliper.Exec(self.input_points, self.output_points)
-            self.fitting_points.append(self.output_points[1])
+            self.state = self.calliper.Exec(self.input_points,self.output_points)
+            self.fitting_points.append(self.calliper.points_out[2])
         self.fitting_line=FittingLine(self.fitting_points)
-        ok,ng,line=self.fitting_line.Ransac()
-        print(ok,ng,line)
-        print(self.state)
-        return self.state
+        self.OK,self.NG,self.result=self.fitting_line.Ransac()
 
 if __name__=='__main__':
     fit=FittingLineOperator()

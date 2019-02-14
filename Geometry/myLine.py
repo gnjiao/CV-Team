@@ -11,7 +11,7 @@ class myLine:
         x=self.direction.x*other.direction.y-other.direction.x*self.direction.y
         y=self.direction.x*other.direction.x+self.direction.y*other.direction.y
         a=abs(math.atan2(x,y))
-        print('a=',(180/math.pi)*a)
+        #print('a=',(180/math.pi)*a)
         return (180/math.pi)*a
 
     def sign_angle_to(self,other,clock_wise=0,negative=0):#逆时针为0，允许负值为1，默认逆时针方向，不允许负值

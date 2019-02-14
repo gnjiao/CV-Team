@@ -8,7 +8,7 @@ class FittingLine:
         self.iter=100
         self.thresh=1
         self.delete_count=0
-        self.min_count=8       #拟合直线需要的最少点数
+        self.min_count=5       #拟合直线需要的最少点数
         self.k=self.iter
         self.line=None
         self.temp_line=None
@@ -22,15 +22,9 @@ class FittingLine:
     def Ransac(self):
         iter=0
         while iter<self.iter:
-            choosed_index1 = numpy.random.randint(0, len(self.points))
-            choosed_index2 = numpy.random.randint(0, len(self.points))
-            # if self.points[choosed_index1].x==self.points[choosed_index2].x and self.points[choosed_index1].y==self.points[choosed_index2].y:
-            #     continue
-
-            # if self.points[choosed_index1].distance_to(self.points[choosed_index2])<2:
-            #     self.i=self.i-1
-            #     continue
-            self.temp_line = myLine(self.points[choosed_index1], self.points[choosed_index2])
+            chose_index1 = numpy.random.randint(0, len(self.points))
+            chose_index2 = numpy.random.randint(0, len(self.points))
+            self.temp_line = myLine(self.points[chose_index1], self.points[chose_index2])
             self.temp_ok_points.clear()
             self.temp_ng_points.clear()
             self.temp_dist = 0
@@ -65,13 +59,13 @@ class FittingLine:
                 #self.Delete_Points(self.ok_points,self.ng_points,temp_count)
             iter+=1
         print('dist:', self.temp_dist)
-        #print(len(self.ok_points))
         if len(self.ok_points)>self.min_count:
             #if self.delete_count>len(self.ng_points):
             self.Delete_Points(self.ok_points,self.ng_points,self.delete_count)
             return self.ok_points,self.ng_points,self.line
         else:
             print('not enough points')
+
     @staticmethod
     def Delete_Points(ok_points,ng_points,delete_count):
         X=[]

@@ -112,6 +112,14 @@ class FindLineItem(QGraphicsItem):
         for i in range(self.rect_count):
             self.rects.append(myRect(self.line.start_point+self.line.direction*gap*i,self.rect_width,self.rect_height,self.line.direction))
 
+    def get_rects(self):
+        scene_rects=list()
+        for i in range(len(self.rects)):
+            center_=self.rects[i].center
+            scene_center=self.mapToScene(QPointF(center_.x,center_.y))
+            #print(scene_center)
+            scene_rects.append(myRect(myPoint(scene_center.x(),scene_center.y()),self.rects[i].width,self.rects[i].height,self.rects[i].direction))
+        return scene_rects
 
     @staticmethod
     def is_in_area(pos,other,tolerance):
