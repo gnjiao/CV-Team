@@ -28,18 +28,24 @@ class OperatorBaseWidget(QDialog):
         self.base_data=QFrame(tab_widget)
         tab_widget.addTab(self.base_data,self.tr(u'base data'))
         self.item_setting=QFrame(tab_widget)
-        tab_widget.addTab(self.item_setting,self.tr(u'item setting'))
+        tab_widget.addTab(self.item_setting,self.tr(u'set item '))
         self.output=QFrame(tab_widget)
-        tab_widget.addTab(self.output,self.tr(u'output data '))
+        tab_widget.addTab(self.output,self.tr(u'output '))
         tool_bar=QToolBar()
         tool_bar.setStyleSheet("QToolBar{color:black}" 
-                               "QToolBar:hover{color:red}"
+                               
                                "QToolBar{background-color:lightgray}"
-                               "QToolBar{border:2px}"
+                               "QToolBar{border:0px}"
                                "QToolBar{border-radius:5px}"
                                "QToolBar{padding:2px 4px}"
                                )
-
+        # self.base_data.setStyleSheet("QFrame{color:black}"
+        #
+        #                        "QFrame{background-color:lightgray}"
+        #                        "QFrame{border:0px}"
+        #                        "QFrame{border-radius:5px}"
+        #                        "QFrame{padding:2px 4px}"
+        #                        )
         tool_bar.setIconSize(QSize(24, 24))
         self.action_load_img = QAction(QIcon(QPixmap(r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image\\cv_team.jpg")), self.tr(u'load img'), self)
         tool_bar.addAction(self.action_load_img)
