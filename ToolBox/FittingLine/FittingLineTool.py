@@ -20,23 +20,9 @@ import cv2
 class FittingLineTool(OperatorBaseWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        #数据部分
-        self.state=State.Idle.value
-        #self.rect= myRect(myPoint(40,40),10,20,myPoint(1,0))
-        self.src_img=None
-        self.line=myLine(myPoint(50,50),myPoint(100,100))
-        self.line_item=FindLineItem(self.line)
-        self.operator=FittingLineOperator()
-        self.line_item.setZValue(100)
-        self.points_item=None
-        self.file_name=None
-        self.rects=list()
-
         #界面部分
         self.setWindowTitle('FittingLine Tool')
         #基础数据部分
-
         self.set_base_data()
 
         #Item 部分设置
@@ -46,15 +32,25 @@ class FittingLineTool(OperatorBaseWidget):
         self.output_result()
         #连接信号与槽
 
-
+        # 数据部分
+        self.state = State.Idle.value
+        # self.rect= myRect(myPoint(40,40),10,20,myPoint(1,0))
+        self.src_img = None
+        self.line = myLine(myPoint(50, 50), myPoint(150, 150))
+        self.line_item = FindLineItem(self.line)
+        self.operator = FittingLineOperator()
+        self.line_item.setZValue(100)
+        self.points_item = None
+        self.file_name = None
+        self.rects = list()
+        self.connect_UI()
 
 
     #生成line_item矩形的角点坐标带入到计算中
     # 界面的基础数据部分
     def set_base_data(self):
-        label = QLabel('this is test label')
         img_setting_gb= QGroupBox('image setting')
-        img_setting_gb.setMaximumHeight(100)
+        img_setting_gb.setMaximumHeight(70)
 
         hlay=QHBoxLayout()
         input_label = QLabel('input image:')
@@ -71,72 +67,78 @@ class FittingLineTool(OperatorBaseWidget):
         calliper_para_gb = QGroupBox('Calliper Parameter')
 
 
-        calliper_width_sl=QSlider()
-        calliper_width_sl.setOrientation(Qt.Horizontal)
-        calliper_width_sl.setMinimum(5)
-        calliper_width_sl.setMaximum(30)
-        calliper_width_sl.setValue(12)
+        self.calliper_width_sl=QSlider()
+        self.calliper_width_sl.setOrientation(Qt.Horizontal)
+        self.calliper_width_sl.setMinimum(5)
+        self.calliper_width_sl.setMaximum(30)
+        self.calliper_width_sl.setValue(12)
 
-        calliper_width_sb=QSpinBox()
-        calliper_width_sb.setMinimum(5)
-        calliper_width_sb.setMaximum(30)
-        calliper_width_sb.setValue(12)
-
+        self.calliper_width_sb=QSpinBox()
+        self.calliper_width_sb.setMinimum(5)
+        self.calliper_width_sb.setMaximum(30)
+        self.calliper_width_sb.setValue(12)
+        self.calliper_width_sl.valueChanged.connect(self.on_width_sl_change)
+        self.calliper_width_sb.valueChanged.connect(self.on_width_sb_change)
 
         hlay_calliper_width=QHBoxLayout()
-        hlay_calliper_width.addWidget(calliper_width_sl)
-        hlay_calliper_width.addWidget(calliper_width_sb)
+        hlay_calliper_width.addWidget(self.calliper_width_sl)
+        hlay_calliper_width.addWidget(self.calliper_width_sb)
 
         calliper_width_gb=QGroupBox('Calliper Width')
         calliper_width_gb.setLayout(hlay_calliper_width)
 
         #上面是calliper width 的相关设置，下面是calliper height 的相关设置
-        calliper_height_sl=QSlider()
-        calliper_height_sl.setOrientation(Qt.Horizontal)
-        calliper_height_sl.setMinimum(5)
-        calliper_height_sl.setMaximum(30)
-        calliper_height_sl.setValue(12)
+        self.calliper_height_sl=QSlider()
+        self.calliper_height_sl.setOrientation(Qt.Horizontal)
+        self.calliper_height_sl.setMinimum(5)
+        self.calliper_height_sl.setMaximum(30)
+        self.calliper_height_sl.setValue(12)
 
-        calliper_height_sb=QSpinBox()
-        calliper_height_sb.setMinimum(5)
-        calliper_height_sb.setMaximum(30)
-        calliper_height_sb.setValue(12)
+        self.calliper_height_sb=QSpinBox()
+        self.calliper_height_sb.setMinimum(5)
+        self.calliper_height_sb.setMaximum(30)
+        self.calliper_height_sb.setValue(12)
+        self.calliper_height_sl.valueChanged.connect(self.on_height_sl_change)
+        self.calliper_height_sb.valueChanged.connect(self.on_height_sb_change)
 
         hlay_calliper_height=QHBoxLayout()
-        hlay_calliper_height.addWidget(calliper_height_sl)
-        hlay_calliper_height.addWidget(calliper_height_sb)
+        hlay_calliper_height.addWidget(self.calliper_height_sl)
+        hlay_calliper_height.addWidget(self.calliper_height_sb)
         calliper_height_gb=QGroupBox('Calliper Height')
         calliper_height_gb.setLayout(hlay_calliper_height)
 
         #分界线-------------------------------------------
-        calliper_thresh_sl = QSlider()
-        calliper_thresh_sl.setOrientation(Qt.Horizontal)
-        calliper_thresh_sl.setMinimum(5)
-        calliper_thresh_sl.setMaximum(50)
-        calliper_thresh_sl.setValue(30)
+        self.calliper_thresh_sl = QSlider()
+        self.calliper_thresh_sl.setOrientation(Qt.Horizontal)
+        self.calliper_thresh_sl.setMinimum(5)
+        self.calliper_thresh_sl.setMaximum(50)
+        self.calliper_thresh_sl.setValue(30)
 
-        calliper_thresh_sb = QSpinBox()
-        calliper_thresh_sb.setMinimum(5)
-        calliper_thresh_sb.setMaximum(50)
-        calliper_thresh_sb.setValue(30)
+        self.calliper_thresh_sb = QSpinBox()
+        self.calliper_thresh_sb.setMinimum(5)
+        self.calliper_thresh_sb.setMaximum(50)
+        self.calliper_thresh_sb.setValue(30)
+
+        self.calliper_thresh_sl.valueChanged.connect(self.on_thresh_sl_change)
+        self.calliper_thresh_sb.valueChanged.connect(self.on_thresh_sb_change)
 
         hlay_calliper_thresh = QHBoxLayout()
-        hlay_calliper_thresh.addWidget(calliper_thresh_sl)
-        hlay_calliper_thresh.addWidget(calliper_thresh_sb)
+        hlay_calliper_thresh.addWidget(self.calliper_thresh_sl)
+        hlay_calliper_thresh.addWidget(self.calliper_thresh_sb)
         calliper_thresh_gb = QGroupBox('Calliper Threshold')
         calliper_thresh_gb.setLayout(hlay_calliper_thresh)
 
 
         calliper_polar_gb = QGroupBox('Polar')
-        polar_cb=QComboBox()
+        self.polar_cb=QComboBox()
         hlay_polar_cb=QHBoxLayout()
-        hlay_polar_cb.addWidget(polar_cb)
+        hlay_polar_cb.addWidget(self.polar_cb)
         calliper_polar_gb.setLayout(hlay_polar_cb)
 
         calliper_result_type_gb = QGroupBox('Result Type')
-        result_type_cb=QComboBox()
+        self.result_type_cb=QComboBox()
         hlay_result_type_cb=QHBoxLayout()
-        hlay_result_type_cb.addWidget(result_type_cb)
+        hlay_result_type_cb.addWidget(self.result_type_cb)
         calliper_result_type_gb.setLayout(hlay_result_type_cb)
 
         hlay1=QHBoxLayout()
@@ -146,18 +148,110 @@ class FittingLineTool(OperatorBaseWidget):
         #以下是最外层groupbox 的设置
         vlay_calliper_para = QVBoxLayout()
         vlay_calliper_para.addLayout(hlay1)
+        vlay_calliper_para.addWidget(calliper_thresh_gb)
         vlay_calliper_para.addWidget(calliper_width_gb)
         vlay_calliper_para.addWidget(calliper_height_gb)
-        vlay_calliper_para.addWidget(calliper_thresh_gb)
-
 
         calliper_para_gb.setLayout(vlay_calliper_para)
 
-
-
-
+        #分界
         line_para_gb = QGroupBox('Line Parameter')
-        hlay = QHBoxLayout()
+        vlay_line_para=QVBoxLayout()
+
+        self.iterate_count_sl = QSlider()
+        self.iterate_count_sl.setOrientation(Qt.Horizontal)
+        self.iterate_count_sl.setMinimum(5)
+        self.iterate_count_sl.setMaximum(50)
+        self.iterate_count_sl.setValue(30)
+
+        self.iterate_count_sb = QSpinBox()
+        self.iterate_count_sb.setMinimum(5)
+        self.iterate_count_sb.setMaximum(50)
+        self.iterate_count_sb.setValue(30)
+
+        self.iterate_count_sl.valueChanged.connect(self.on_iterate_sl_change)
+        self.iterate_count_sb.valueChanged.connect(self.on_iterate_sb_change)
+
+        hlay_iterate_count = QHBoxLayout()
+        hlay_iterate_count.addWidget(self.iterate_count_sl)
+        hlay_iterate_count.addWidget(self.iterate_count_sb)
+        iterate_count_gb = QGroupBox('Iterate Count')
+        iterate_count_gb.setLayout(hlay_iterate_count)
+
+        #上面部分是迭代次数代码
+        #下面部分是卡尺数量设置代码
+        self.calliper_count_sl = QSlider()
+        self.calliper_count_sl.setOrientation(Qt.Horizontal)
+        self.calliper_count_sl.setMinimum(5)
+        self.calliper_count_sl.setMaximum(99)
+        self.calliper_count_sl.setValue(12)
+
+        self.calliper_count_sb = QSpinBox()
+        self.calliper_count_sb.setMinimum(5)
+        self.calliper_count_sb.setMaximum(99)
+        self.calliper_count_sb.setValue(12)
+
+        self.calliper_count_sl.valueChanged.connect(self.on_calliper_count_sl_change)
+        self.calliper_count_sb.valueChanged.connect(self.on_calliper_count_sb_change)
+
+        hlay_calliper_count = QHBoxLayout()
+        hlay_calliper_count.addWidget(self.calliper_count_sl)
+        hlay_calliper_count.addWidget(self.calliper_count_sb)
+        calliper_count_gb = QGroupBox('Calliper Count')
+        calliper_count_gb.setLayout(hlay_calliper_count)
+
+        #上面是卡尺数量代码
+        #下面是距离阈值代码
+        self.dist_thresh_sl = QSlider()
+        self.dist_thresh_sl.setOrientation(Qt.Horizontal)
+        self.dist_thresh_sl.setMinimum(1)
+        self.dist_thresh_sl.setMaximum(20)
+        self.dist_thresh_sl.setValue(5)
+
+        self.dist_thresh_sb = QSpinBox()
+        self.dist_thresh_sb.setMinimum(1)
+        self.dist_thresh_sb.setMaximum(20)
+        self.dist_thresh_sb.setValue(5)
+
+        self.dist_thresh_sl.valueChanged.connect(self.on_dist_thresh_sl_change)
+        self.dist_thresh_sb.valueChanged.connect(self.on_dist_thresh_sb_change)
+
+        hlay_dist_thresh = QHBoxLayout()
+        hlay_dist_thresh.addWidget(self.dist_thresh_sl)
+        hlay_dist_thresh.addWidget(self.dist_thresh_sb)
+        dist_thresh_gb = QGroupBox('Distance thresh')
+        dist_thresh_gb.setLayout(hlay_dist_thresh)
+
+        #上面的是距离阈值代码
+        #下面的是剔除点数代码
+        self.delete_count_sl = QSlider()
+        self.delete_count_sl.setOrientation(Qt.Horizontal)
+        self.delete_count_sl.setMinimum(0)
+        self.delete_count_sl.setMaximum(20)
+        self.delete_count_sl.setValue(0)
+
+        self.delete_count_sb = QSpinBox()
+        self.delete_count_sb.setMinimum(0)
+        self.delete_count_sb.setMaximum(20)
+        self.delete_count_sb.setValue(0)
+
+        self.delete_count_sl.valueChanged.connect(self.on_delete_count_sl_change)
+        self.delete_count_sb.valueChanged.connect(self.on_delete_count_sb_change)
+
+        hlay_delete_count = QHBoxLayout()
+        hlay_delete_count.addWidget(self.delete_count_sl)
+        hlay_delete_count.addWidget(self.delete_count_sb)
+        delete_count_gb = QGroupBox('Delete Count')
+        delete_count_gb.setLayout(hlay_delete_count)
+
+
+
+        vlay_line_para.addWidget(iterate_count_gb)
+        vlay_line_para.addWidget(calliper_count_gb)
+        vlay_line_para.addWidget(dist_thresh_gb)
+        vlay_line_para.addWidget(delete_count_gb)
+
+        line_para_gb.setLayout(vlay_line_para)
         vlay=QVBoxLayout()
         vlay.addWidget(img_setting_gb)
         vlay.addWidget(calliper_para_gb)
@@ -171,11 +265,11 @@ class FittingLineTool(OperatorBaseWidget):
         vlay.addWidget(item_setting_gb)
         hlay = QHBoxLayout()
         start_point_lb = QLabel('Start Point:')
-        start_point_x_le = QLineEdit()
-        start_point_y_le = QLineEdit()
+        start_point_xmin_le = QLineEdit()
+        start_point_xmax_le = QLineEdit()
         hlay.addWidget(start_point_lb)
-        hlay.addWidget(start_point_x_le)
-        hlay.addWidget(start_point_y_le)
+        hlay.addWidget(start_point_xmin_le)
+        hlay.addWidget(start_point_xmax_le)
 
         hlay1 = QHBoxLayout()
         end_point_lb = QLabel('End   Point:')
@@ -365,34 +459,80 @@ class FittingLineTool(OperatorBaseWidget):
 
         judgment_gb = QGroupBox('Parameter judgment')
         vlay_jug=QVBoxLayout()
-        hlay_start = QHBoxLayout()
-        start_point_cb = QCheckBox('Start Point:')
-        start_point_x_le = QLineEdit()
-        start_point_y_le = QLineEdit()
-        start_point_x_le.setDisabled(True)
-        start_point_y_le.setDisabled(True)
-        hlay_start.addWidget(start_point_cb)
-        hlay_start.addWidget(start_point_x_le)
-        hlay_start.addWidget(start_point_y_le)
+        hlay_start_x = QHBoxLayout()
+        start_point__x_cb = QCheckBox('Start Point X:')
+        self.start_point_xmin_le = QLineEdit()
+        self.start_point_xmax_le = QLineEdit()
+        self.start_point_xmin_le.setDisabled(True)
+        self.start_point_xmax_le.setDisabled(True)
+        hlay_start_x.addWidget(start_point__x_cb)
+        hlay_start_x.addWidget(self.start_point_xmin_le)
+        hlay_start_x.addWidget(self.start_point_xmax_le)
+        start_point__x_cb.stateChanged.connect(self.on_start_point_x)
 
-        hlay_end = QHBoxLayout()
-        end_point_cb = QCheckBox('End   Point:')
-        hlay_end.addWidget(end_point_cb)
-        end_point_x_le = QLineEdit()
-        end_point_y_le = QLineEdit()
-        end_point_x_le.setDisabled(True)
-        end_point_y_le.setDisabled(True)
-        hlay_end.addWidget(end_point_x_le)
-        hlay_end.addWidget(end_point_y_le)
+
+        hlay_start_y = QHBoxLayout()
+        start_point_y_cb = QCheckBox('Start Point Y:')
+        hlay_start_y.addWidget(start_point_y_cb)
+        self.start_point_ymin_le = QLineEdit()
+        self.start_point_ymax_le = QLineEdit()
+        self.start_point_ymin_le.setDisabled(True)
+        self.start_point_ymax_le.setDisabled(True)
+        hlay_start_y.addWidget(self.start_point_ymin_le)
+        hlay_start_y.addWidget(self.start_point_ymax_le)
+        start_point_y_cb.stateChanged.connect(self.on_start_point_y)
+
+        hlay_end_x = QHBoxLayout()
+        end_point_x_cb = QCheckBox('End   Point X:')
+        self.end_point_xmin_le = QLineEdit()
+        self.end_point_xmax_le = QLineEdit()
+        self.end_point_xmin_le.setDisabled(True)
+        self.end_point_xmax_le.setDisabled(True)
+        hlay_end_x.addWidget(end_point_x_cb)
+        hlay_end_x.addWidget(self.end_point_xmin_le)
+        hlay_end_x.addWidget(self.end_point_xmax_le)
+        end_point_x_cb.stateChanged.connect(self.on_end_point_x)
+
+        hlay_end_y = QHBoxLayout()
+        end_point_y_cb = QCheckBox('End   Point Y:')
+        hlay_end_y.addWidget(end_point_y_cb)
+        self.end_point_ymin_le = QLineEdit()
+        self.end_point_ymax_le = QLineEdit()
+        self.end_point_ymin_le.setDisabled(True)
+        self.end_point_ymax_le.setDisabled(True)
+        hlay_end_y.addWidget(self.end_point_ymin_le)
+        hlay_end_y.addWidget(self.end_point_ymax_le)
+        end_point_y_cb.stateChanged.connect(self.on_end_point_y)
 
         hlay_degree = QHBoxLayout()
-        end_point_cb = QCheckBox('Degree:')
-        hlay_degree.addWidget(end_point_cb)
-        degree_le = QLineEdit()
-        degree_le.setDisabled(True)
-        hlay_degree.addWidget(degree_le)
-        vlay_jug.addLayout(hlay_start)
-        vlay_jug.addLayout(hlay_end)
+        degree_cb = QCheckBox('Degree:       ')
+        hlay_degree.addWidget(degree_cb)
+        self.degree_min_le = QLineEdit()
+        self.degree_max_le = QLineEdit()
+        self.degree_min_le.setDisabled(True)
+        self.degree_max_le.setDisabled(True)
+        hlay_degree.addWidget(self.degree_min_le)
+        hlay_degree.addWidget(self.degree_max_le)
+        degree_cb.stateChanged.connect(self.on_degree)
+
+        hlay_xy=QHBoxLayout()
+        space_lb=QLabel('                 ')
+        space_lb.setMaximumHeight(20)
+        x_lb=QLabel('Min')
+        x_lb.setAlignment(Qt.AlignCenter)
+        y_lb=QLabel('Max')
+        x_lb.setMaximumHeight(20)
+        y_lb.setMaximumHeight(20)
+        y_lb.setAlignment(Qt.AlignCenter)
+        hlay_xy.addWidget(space_lb)
+        hlay_xy.addWidget(x_lb)
+        hlay_xy.addWidget(y_lb)
+
+        vlay_jug.addLayout(hlay_xy)
+        vlay_jug.addLayout(hlay_start_x)
+        vlay_jug.addLayout(hlay_start_y)
+        vlay_jug.addLayout(hlay_end_x)
+        vlay_jug.addLayout(hlay_end_y)
         vlay_jug.addLayout(hlay_degree)
 
         judgment_gb.setLayout(vlay_jug)
@@ -401,6 +541,24 @@ class FittingLineTool(OperatorBaseWidget):
         vlay.addWidget(judgment_gb)
 
         self.output.setLayout(vlay)
+
+    def connect_UI(self):
+        self.operator.calliper.polar_property=self.polar_cb.currentIndex()
+        self.operator.calliper.result=self.result_type_cb.currentIndex()
+        self.operator.calliper.threshold=self.calliper_thresh_sb.value()
+        self.line_item.rect_width=self.calliper_width_sb.value()
+        self.line_item.rect_height=self.calliper_height_sb.value()
+
+        self.operator.fitting_line.iter=self.iterate_count_sb.value()
+        self.line_item.rect_count=self.calliper_count_sb.value()
+        self.operator.fitting_line.dist=self.dist_thresh_sb.value()
+        self.operator.fitting_line.delete_count=self.delete_count_sb.value()
+        self.view_widget.update()
+
+
+
+
+
 
     def on_load_image(self):
         file_name,_=QFileDialog.getOpenFileName(None,'载入图片',r"C:\\Users\\Administrator\\Desktop\\CV-Team\\CV-Team\\image",'Image files(*.jpg *.bmp *.jpeg)')
@@ -413,13 +571,13 @@ class FittingLineTool(OperatorBaseWidget):
             self.view_widget.set_image(qimg)       #设置界面图片
             if qimg is None:
                 return
-            #self.view_widget.scene.removeItem(self.rect_item)
             if self.points_item is not None:
                 self.view_widget.scene.removeItem(self.points_item)
-            #self.rect=myRect(myPoint(qimg.width()/2,qimg.height()/2),qimg.width()/10,qimg.height()/10,myPoint(1,0))
-            #self.rect_item=RectItem(self.rect)
             self.view_widget.scene.removeItem(self.line_item)
             self.line_item=FindLineItem(self.line)
+            self.connect_UI()                                   #设置参数
+            self.line_item.generate_rect()                      #重新生成矩形
+            self.line_item.update()                                                 #绘制
             self.view_widget.add_item(self.line_item)
 
             cv_img=cv2.imread(self.file_name)
@@ -445,6 +603,7 @@ class FittingLineTool(OperatorBaseWidget):
         #     # self.line.setPen(pen)
         #     # self.view_widget.add_item(self.line)
         self.view_widget.add_item(self.points_item)
+
 
 
     #槽函数定义
@@ -473,6 +632,71 @@ class FittingLineTool(OperatorBaseWidget):
             self.result_line_cb.setChecked(False)
             self.ok_points_cb.setChecked(False)
             self.ng_points_cb.setChecked(False)
+
+    def on_width_sl_change(self,value):
+        self.calliper_width_sb.setValue(value)
+    def on_width_sb_change(self,value):
+        self.calliper_width_sl.setValue(value)
+    def on_height_sl_change(self,value):
+        self.calliper_height_sb.setValue(value)
+    def on_height_sb_change(self,value):
+        self.calliper_height_sl.setValue(value)
+    def on_thresh_sl_change(self,value):
+        self.calliper_thresh_sb.setValue(value)
+    def on_thresh_sb_change(self,value):
+        self.calliper_thresh_sl.setValue(value)
+    def on_iterate_sl_change(self,value):
+        self.iterate_count_sb.setValue(value)
+    def on_iterate_sb_change(self,value):
+        self.iterate_count_sl.setValue(value)
+    def on_calliper_count_sl_change(self,value):
+        self.calliper_count_sb.setValue(value)
+    def on_calliper_count_sb_change(self,value):
+        self.calliper_count_sl.setValue(value)
+    def on_dist_thresh_sl_change(self,value):
+        self.dist_thresh_sb.setValue(value)
+    def on_dist_thresh_sb_change(self,value):
+        self.dist_thresh_sl.setValue(value)
+    def on_delete_count_sl_change(self,value):
+        self.delete_count_sb.setValue(value)
+    def on_delete_count_sb_change(self,value):
+        self.delete_count_sl.setValue(value)
+
+    def on_start_point_x(self,state):
+        if state == Qt.Checked:
+            self.start_point_xmin_le.setDisabled(False)
+            self.start_point_xmax_le.setDisabled(False)
+        else:
+            self.start_point_xmin_le.setDisabled(True)
+            self.start_point_xmax_le.setDisabled(True)
+    def on_start_point_y(self,state):
+        if state == Qt.Checked:
+            self.start_point_ymin_le.setDisabled(False)
+            self.start_point_ymax_le.setDisabled(False)
+        else:
+            self.start_point_ymin_le.setDisabled(True)
+            self.start_point_ymax_le.setDisabled(True)
+    def on_end_point_x(self,state):
+        if state == Qt.Checked:
+            self.end_point_xmin_le.setDisabled(False)
+            self.end_point_xmax_le.setDisabled(False)
+        else:
+            self.end_point_xmin_le.setDisabled(True)
+            self.end_point_xmax_le.setDisabled(True)
+    def on_end_point_y(self,state):
+        if state == Qt.Checked:
+            self.end_point_ymin_le.setDisabled(False)
+            self.end_point_ymax_le.setDisabled(False)
+        else:
+            self.end_point_ymin_le.setDisabled(True)
+            self.end_point_ymax_le.setDisabled(True)
+    def on_degree(self,state):
+        if state == Qt.Checked:
+            self.degree_min_le.setDisabled(False)
+            self.degree_max_le.setDisabled(False)
+        else:
+            self.degree_min_le.setDisabled(True)
+            self.degree_max_le.setDisabled(True)
 
 if __name__=='__main__':
     app = QApplication(sys.argv)

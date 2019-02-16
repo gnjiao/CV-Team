@@ -16,7 +16,7 @@ class FittingLineOperator:
         self.src_img=None
         self.input_points=list()      #卡尺的输入点
         self.output_points=list()     #卡尺的输出点
-        self.fitting_line=None
+        self.fitting_line=FittingLine(self.fitting_points)
         self.OK=list()
         self.NG=list()
         self.result=None
