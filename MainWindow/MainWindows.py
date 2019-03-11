@@ -7,7 +7,6 @@ from Widget.ToolWindow import ToolWindow
 
 import sys
 
-
 # 主窗口类
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):

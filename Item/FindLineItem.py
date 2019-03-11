@@ -36,11 +36,14 @@ class FindLineItem(QGraphicsItem):
             self.draw_rect(painter,self.rects[i])
 
     def boundingRect(self):
-        x_list = [self.rects[0].A.x,  self.rects[0].D.x, self.rects[-1].A.x, self.rects[-1].D.x]
-        y_list = [self.rects[0].A.y,  self.rects[0].D.y, self.rects[-1].A.y, self.rects[-1].D.y]
+        x_list = [self.rects[0].A.x,  self.rects[0].B.x,self.rects[0].C.x,self.rects[0].D.x,
+                  self.rects[-1].A.x, self.rects[-1].B.x,self.rects[-1].C.x,self.rects[-1].D.x]
+
+        y_list = [self.rects[0].A.y,  self.rects[0].B.y,self.rects[0].C.y,self.rects[0].D.y,
+                  self.rects[-1].A.y, self.rects[-1].B.y,self.rects[-1].C.y,self.rects[-1].D.y]
         x_list.sort()
         y_list.sort()
-        return QRectF(x_list[0]-5,y_list[0]-5,x_list[3]-x_list[0]+10,y_list[3]-y_list[0]+10)
+        return QRectF(x_list[0]-5,y_list[0]-5,x_list[7]-x_list[0]+10,y_list[7]-y_list[0]+10)
 
 
     def shape(self):

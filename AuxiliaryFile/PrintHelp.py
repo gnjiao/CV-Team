@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
-
 """
+文档说明 ：
+下载此应用程序后需在Pycharm上安装PyQt5
+
+
+
+
 点:              print('point:',self.point.x,self.point.y)
 线：             print('line:',self.line.start_point.x,self.line.start_point.y)
 线方向：         print('dir:',self.line.direction.x,self.line.direction.y)
@@ -18,6 +23,4 @@
 QStringList   ['a','b']
 
 """
-import  math
-a=math.log(0.0001)/math.log(1-pow(3/10,2))
-print(a)
+
