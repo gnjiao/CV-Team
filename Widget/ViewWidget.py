@@ -6,11 +6,12 @@ from PyQt5.QtGui import *
 import sys
 from Widget.View import View
 from Item.RectItem import RectItem
-
+from Item.FindCircleItem import FindCircleItem
 
 from Geometry.myLine import myLine
 from Geometry.myPoint import myPoint
 from Geometry.myRect import myRect
+from Geometry.myCircle import myCircle
 
 class ViewWidget(QWidget):
     def __init__(self,*args,**kwargs):
@@ -112,12 +113,15 @@ if __name__=='__main__':
     height = 30
     dir = myPoint(3, 4)
     rect = myRect(point1, width, height, dir)
+    circle=myCircle(myPoint(50,50),20)
     line=myLine(myPoint(50,50),myPoint(146,50))
     rect_item = RectItem(rect)#RectItem(rect)
+    circle_item=FindCircleItem(circle)
     view_widget=ViewWidget()
     img=QImage("../image/cv_team.jpg")
     view_widget.set_image(img)
     view_widget.add_item(rect_item)
+    view_widget.add_item(circle_item)
     view_widget.show()
     view_widget.resize(800,600)
     #window.showMaximized()

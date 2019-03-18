@@ -20,9 +20,10 @@ class myPoint:
         return other
     def rotate_by(self,other,alpha):
         v=self-other
-        v_1=myPoint(math.cos(alpha)*v.x-math.sin(alpha)*v.y,math.sin(alpha)*v.x+math.cos(alpha)*v.y)
+        v_1=myPoint(math.cos(math.pi/180*alpha)*v.x-math.sin(math.pi/180*alpha)*v.y,math.sin(math.pi/180*alpha)*v.x+math.cos(math.pi/180*alpha)*v.y)
         return other+v_1
-
+    def rotate_of(self,other,alpha):
+        pass
     def normalized(self):
         mod=self.norm()
         if mod == 0:
@@ -32,7 +33,7 @@ class myPoint:
 
 
 if __name__=='__main__':
-    point1=myPoint(1,1)
-    point2=myPoint(1,2)
-    a=(point2==point1)
-    print(a)
+    point1=myPoint(2,0)
+    point2=myPoint(0,0)
+
+    print(point1.rotate_by(point2,90).x,point1.rotate_by(point2,90).y)

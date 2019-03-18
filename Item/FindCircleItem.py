@@ -1,0 +1,155 @@
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from Geometry.myPoint import myPoint
+from Geometry.myRect import myRect
+from Geometry.myCircle import myCircle
+from Geometry.myCircle import my3Circle
+
+import math
+
+class FindCircleItem(QGraphicsItem):
+    def __init__(self, circle, parent=None):
+        super(FindCircleItem, self).__init__(parent)
+        self.in_area=0
+        self.center=circle.center
+        self.radius=circle.radius
+        self.circle=circle
+
+        self.rect_count=8
+        self.rects=list()
+        self.rect_width=5
+        self.rect_height=10
+        self.generate_rect()
+
+        self.setFlag(QGraphicsItem.ItemIsSelectable)
+        self.setFlag(QGraphicsItem.ItemIsMovable,True)
+        #self.setFlag(QGraphicsItem.ItemIgnoresTransformations)
+        self.setAcceptHoverEvents(True)
+
+    def paint(self, painter, option, widget=None):
+        pen = QPen()
+        pen.setColor(Qt.red)
+        pen.setWidth(0)
+        painter.setPen(pen)
+        painter.drawEllipse(QPointF(self.center.x,self.center.y),self.radius,self.radius)
+        for i in range(self.rect_count):
+            self.draw_rect(painter,self.rects[i])
+
+    def boundingRect(self):
+
+
+
+        return QRectF(self.circle.center.x-self.radius-5,self.circle.center.x-self.radius-5,
+                      2*self.radius+10,2*self.radius+10)
+
+
+    # def shape(self):
+    #     path = QPainterPath()
+    #     points = list()
+    #     points.append(QPointF(self.rects[0].A.x, self.rects[0].A.y))
+    #     points.append(QPointF(self.rects[-1].B.x, self.rects[-1].B.y))
+    #     points.append(QPointF(self.rects[-1].C.x, self.rects[-1].C.y))
+    #     points.append(QPointF(self.rects[0].D.x, self.rects[0].D.y))
+    #     points.append(QPointF(self.rects[0].A.x, self.rects[0].A.y))
+    #     poly = QPolygonF(points)
+    #     path.addPolygon(poly)
+    #     return path
+
+    # def mousePressEvent(self, event):
+    #     if self.is_in_area(event.pos(), self.line.start_point, 5):
+    #         self.in_area=1
+    #         self.setFlag(QGraphicsItem.ItemIsMovable, False)
+    #     elif self.is_in_area(event.pos(), self.line.end_point, 5):
+    #         self.in_area=2
+    #         self.setFlag(QGraphicsItem.ItemIsMovable, False)
+    #     elif self.rect_height/2-5<self.line.to_point(myPoint(event.pos().x(),event.pos().y()))<self.rect_height/2+5:
+    #         self.in_area=3
+    #         self.setFlag(QGraphicsItem.ItemIsMovable, False)
+    #     else:
+    #         self.in_area=0
+    #         self.setFlag(QGraphicsItem.ItemIsMovable, True)
+    #
+    #     QGraphicsItem.mousePressEvent(self, event)
+    #
+    # def mouseMoveEvent(self, event):
+    #
+    #
+    #     if self.in_area==1:
+    #         self.line=self.line.resize_by_start(myPoint(event.pos().x(),event.pos().y()))
+    #         self.generate_rect()
+    #         self.prepareGeometryChange()
+    #         self.update()
+    #     if self.in_area==2:
+    #         self.line=self.line.resize_by_end(myPoint(event.pos().x(),event.pos().y()))
+    #         self.generate_rect()
+    #         self.prepareGeometryChange()
+    #         self.update()
+    #     if self.in_area==3:
+    #         self.rect_height=self.line.to_point(myPoint(event.pos().x(),event.pos().y()))*2
+    #         self.generate_rect()
+    #         self.prepareGeometryChange()
+    #         self.update()
+    #
+    #     QGraphicsItem.mouseMoveEvent(self,event)
+    #
+    # def hoverMoveEvent(self, event):
+    #     if self.is_in_area(event.pos(), self.line.start_point, 5) or self.is_in_area(event.pos(), self.line.end_point, 5) \
+    #             or self.rect_height/2-5<self.line.to_point(myPoint(event.pos().x(),event.pos().y()))<self.rect_height/2+5:
+    #         self.setCursor(Qt.SizeAllCursor)
+    #     else:
+    #         self.setCursor(Qt.ArrowCursor)
+    #
+    # # def wheelEvent(self,event):
+    # #     if event.delta() > 0:
+    # #         self.setScale(self.scale() * 1.1)
+    # #     else:
+    # #         self.setScale(self.scale()*0.9)
+    # #     QGraphicsItem.wheelEvent(self,event)
+
+    def generate_rect(self):
+        rotate_angle=360/self.rect_count
+        self.rects.clear()
+        for i in range(self.rect_count):
+            point=myPoint(self.circle.center.x+self.radius,self.circle.center.y)
+            rect_center=point.rotate_by(self.circle.center,rotate_angle*i)
+            self.rects.append(myRect(rect_center,self.rect_height,self.rect_width,(rect_center-self.circle.center).normalized()))
+
+        #
+        # gap=self.line.length/(self.rect_count-1)
+        # self.rects.clear()
+        # for i in range(self.rect_count):
+        #
+        #     self.rects.append(myRect(self.line.start_point+self.line.direction*gap*i,self.rect_width,self.rect_height,self.line.direction))
+
+    def get_rects(self):
+        scene_rects=list()
+        for i in range(len(self.rects)):
+            center_=self.rects[i].center
+            scene_center=self.mapToScene(QPointF(center_.x,center_.y))
+            #print(scene_center)
+            scene_rects.append(myRect(myPoint(scene_center.x(),scene_center.y()),self.rects[i].width,self.rects[i].height,self.rects[i].direction))
+        return scene_rects
+
+    @staticmethod
+    def is_in_area(pos,other,tolerance):
+        if math.sqrt(pow(other.x-pos.x(),2)+pow(other.y-pos.y(),2))<tolerance:
+            return True
+        else:
+            return False
+
+
+
+
+
+    @staticmethod
+    def draw_rect(painter, rect):
+        painter.drawLine(rect.A.x, rect.A.y, rect.B.x, rect.B.y)
+        painter.drawLine(rect.B.x, rect.B.y, rect.C.x, rect.C.y)
+        painter.drawLine(rect.C.x, rect.C.y, rect.D.x, rect.D.y)
+        painter.drawLine(rect.D.x, rect.D.y, rect.A.x, rect.A.y)
+
+        # painter.drawLine(A.x, A.y, B.x, B.y)
+        #         # painter.drawLine(B.x, B.y, C.x, C.y)
+        #         # painter.drawLine(C.x, C.y, D.x, D.y)
+        #         # painter.drawLine(D.x, D.y, A.x, A.y)
